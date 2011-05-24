@@ -151,13 +151,13 @@ describe CarrierWave::Mongoid do
         @doc.valid?
         @doc.errors[:image].should == ['is not an allowed file type']
 
-        change_locale_and_store_translations(:pt, :mongoid => {
+        change_locale_and_store_translations(:pt,
           :errors => {
             :messages => {
               :carrierwave_integrity_error => 'tipo de imagem não permitido.'
             }
           }
-        }) do
+        ) do
           @doc.should_not be_valid
           @doc.errors[:image].should == ['tipo de imagem não permitido.']
         end
@@ -179,13 +179,13 @@ describe CarrierWave::Mongoid do
         @doc.valid?
         @doc.errors[:image].should == ['failed to be processed']
 
-        change_locale_and_store_translations(:pt, :mongoid => {
+        change_locale_and_store_translations(:pt,
           :errors => {
             :messages => {
               :carrierwave_processing_error => 'falha ao processar imagem.'
             }
           }
-        }) do
+        ) do
           @doc.should_not be_valid
           @doc.errors[:image].should == ['falha ao processar imagem.']
         end
