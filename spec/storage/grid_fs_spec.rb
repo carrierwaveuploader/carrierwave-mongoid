@@ -100,12 +100,9 @@ describe CarrierWave::Storage::GridFS do
     describe "#recreate_versions!" do
       before do
         @uploader_class = Class.new(CarrierWave::Uploader::Base)
-        @uploader_class.class_eval{
-          include CarrierWave::MiniMagick
+        @uploader_class.class_eval do
           storage :grid_fs
-
-          process :resize_to_fit => [10, 10]
-        }
+        end
 
         @versioned = @uploader_class.new
         @versioned.stub!(:grid_fs_connection).and_return(@database)
@@ -123,33 +120,6 @@ describe CarrierWave::Storage::GridFS do
         }.should_not raise_error
 
         @versioned.should be_present
-      end
-    end
-
-
-   describe "resize_to_fill" do
-      before do
-        @uploader_class = Class.new(CarrierWave::Uploader::Base)
-        @uploader_class.class_eval{
-          include CarrierWave::MiniMagick
-          storage :grid_fs
-        }
-
-        @versioned = @uploader_class.new
-        @versioned.stub!(:grid_fs_connection).and_return(@database)
-
-        @versioned.store! File.open(file_path('portrait.jpg'))
-      end
-
-      after do
-        FileUtils.rm_rf(public_path)
-      end
-
-      it "resizes the file with out error" do
-        lambda {
-          @versioned.resize_to_fill(200, 200)
-        }.should_not raise_error
-
       end
     end
   end
