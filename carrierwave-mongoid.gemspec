@@ -22,5 +22,6 @@ Gem::Specification.new do |s|
   s.add_dependency "carrierwave"
   s.add_dependency "mongoid"
   s.add_development_dependency "rspec", ["~> 2.0"]
+  s.add_development_dependency "bson_ext", ["> 1.3.0"]
   s.add_development_dependency "sqlite3"
 end
