@@ -4,3 +4,4 @@ pkg/*
 spec/public
 .rvmrc
 Gemfile.lock
+log/*
