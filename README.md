@@ -1,45 +1,20 @@
 # CarrierWave for Mongoid
 
-This gem adds support for Mongoid and MongoDB's GridFS to CarrierWave, see the
-CarrierWave documentation for more detailed usage instructions.
+This gem adds support for Mongoid and MongoDB's GridFS to [CarrierWave](https://github.com/jnicklas/carrierwave/)
 
-### This version supports ONLY version of mongoid ~> 2.1
-Keep in mind that if you came up from previous versions you should make a few steps to go with it:
+This functionality used to be part of CarrierWave but has since been extracted into this gem.
 
-* change(rename in db) field name from `avatar_name` to `avatar`(appropriate to your uploader name)
-* fix your code where you need to operate with uploaded file's filename from `avatar` to `avatar_identifier`
-
-Install it like this:
+## Installation
 
     gem install carrierwave-mongoid
 
-Use it like this:
+## Requiring the gem
 
-```ruby
-require 'carrierwave/mongoid'
-```
+    require 'carrierwave/mongoid'
 
-Make sure to disable auto_validation on the mounted column.
+## Using Bundler
 
-Using bundler:
-
-```ruby
-gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
-```
-
-This used to be part of CarrierWave but has been extracted.
-
-## Migration from carrierwave 0.5.6
-
-The default database field for carrierwave 0.5.6 is called upload_filename with "upload" beeing the chosen mount point.
-This changed in version 0.5.7 to be just "upload".
-If you don't want to change your code in this respect, use the :mount_on option to specify
-the fieldname explicitly within the mount_uploader statement of the base class:
-
-```ruby
-class Dokument
-  mount_uploader :upload, DokumentUploader, mount_on: :upload_filename
-```
+    gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 
 ## Using MongoDB's GridFS store
 
@@ -73,8 +48,26 @@ CarrierWave.configure do |config|
 end
 ```
 
-## Known issues/ limitations
+## Changes from earlier versions of CarrierWave with Mongoid support built in
 
-If using Mongoid, note that embedded documents files aren't saved when parent documents are saved.
+This version supports ONLY version of mongoid ~> 2.1
+
+You can use `upload_identifier` to retrieve the original name of the uploaded file.
+
+The default mount column used to be `upload_filename` and now is simply `upload`. 
+If you'd like to avoid a database migration, simply use the `:mount_on` option to specify
+the field name explicitly. For example:
+
+```ruby
+class Dokument
+  mount_uploader :upload, DokumentUploader, mount_on: :upload_filename
+end
+```
+
+## Known issues and limitations
+
+It is recommended that you disable Mongoid's auto_validation on the mounted column.
+
+Note that embedded documents files aren't saved when parent documents are saved.
 You must explicitly call save on embedded documents in order to save their attached files.
 You can read more about this [here](https://github.com/jnicklas/carrierwave/issues#issue/81)
