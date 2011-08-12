@@ -31,8 +31,8 @@ This used to be part of CarrierWave but has been extracted.
 
 ## Migration from carrierwave 0.5.6
 
-The default database field for carrierwave 0.5.6 is called <upload>_filename -
-this changed in version 0.5.7 to be just <upload> with "upload" beeing the chosen mount point.
+The default database field for carrierwave 0.5.6 is called upload_filename with "upload" beeing the chosen mount point.
+This changed in version 0.5.7 to be just "upload".
 If you don't want to change your code in this respect, use the :mount_on option to specify
 the fieldname explicitly within the mount_uploader statement of the base class:
 
