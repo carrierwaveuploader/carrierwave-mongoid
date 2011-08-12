@@ -7,7 +7,7 @@ CarrierWave documentation for more detailed usage instructions.
 Keep in mind that if you came up from previous versions you should make a few steps to go with it:
 
 * change(rename in db) field name from `avatar_name` to `avatar`(appropriate to your uploader name)
-* fix you code where you need to operate with uploaded file's filename from `avatar` to `avatar_identifier`
+* fix your code where you need to operate with uploaded file's filename from `avatar` to `avatar_identifier`
 
 Install it like this:
 
@@ -28,6 +28,18 @@ gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 ```
 
 This used to be part of CarrierWave but has been extracted.
+
+## Migration from carrierwave 0.5.6
+
+The default database field for carrierwave 0.5.6 is called <upload>_filename -
+this changed in version 0.5.7 to be just <upload> with "upload" beeing the chosen mount point.
+If you don't want to change your code in this respect, use the :mount_on option to specify
+the fieldname explicitly within the mount_uploader statement of the base class:
+
+```ruby
+class Dokument
+  mount_uploader :upload, DokumentUploader, mount_on: :upload_filename
+```
 
 ## Using MongoDB's GridFS store
 
