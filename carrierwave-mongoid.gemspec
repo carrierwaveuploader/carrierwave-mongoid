@@ -19,9 +19,10 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "carrierwave"
-  s.add_dependency "mongoid"
-  s.add_development_dependency "rspec", ["~> 2.0"]
-  s.add_development_dependency "bson_ext", ["> 1.3.0"]
-  s.add_development_dependency "sqlite3"
+  s.add_dependency "carrierwave", [">= 0.5.6"]
+  s.add_dependency "mongoid", ["~> 2.1"]
+  s.add_development_dependency "rspec", ["~> 2.6"]
+  s.add_development_dependency "bson_ext", ["~> 1.3"]
+  s.add_development_dependency "rake", ["~> 0.9"]
+  s.add_development_dependency "mini_magick"
 end
