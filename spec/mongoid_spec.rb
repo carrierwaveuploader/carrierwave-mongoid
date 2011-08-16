@@ -450,6 +450,14 @@ describe CarrierWave::Mongoid do
         File.exists?(public_path('uploads/old.jpeg')).should be_true
       end
 
+      it "should not touch parent's dirty attributes" do
+        @class.field :title
+        @doc.title = "Title"
+        @embedded_doc.image = stub_file('new.jpeg')
+        @embedded_doc.save.should be_true
+        @doc.title.should == "Title"
+      end
+
       describe 'with double embedded documents' do
 
         before do
