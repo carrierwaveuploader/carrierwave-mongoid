@@ -77,6 +77,7 @@ module CarrierWave
         def file_length
           grid.open(@path, 'r').file_length
         end
+        alias :size :file_length
 
       protected
 
