@@ -54,6 +54,8 @@ This version supports ONLY version of mongoid ~> 2.1
 
 You can use `upload_identifier` to retrieve the original name of the uploaded file.
 
+In the earlier version, the mount_uploader-method for mongoid had been defined in lib/carrierwave/orm/mongoid. This code has been moved to carrierwave/mongoid. If you update from earlier versions, don't forget to adjust your require accordingly in your carrierwave-initializer.
+
 The default mount column used to be the name of the upload column plus  `_filename`. Now it is simply the name of the column. Most of the time, the column was called `upload`, so it would have been mounted to `upload_filename`.
 If you'd like to avoid a database migration, simply use the `:mount_on` option to specify
 the field name explicitly. Therefore, you only have to add a `_filename` to your column name. For example, if your column is called `:upload`:
