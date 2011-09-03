@@ -68,6 +68,6 @@ end
 
 ## Known issues and limitations
 
-Note that embedded documents files aren't saved when parent documents are saved.
+Note that files mounted in embedded documents aren't saved when parent documents are saved.
 You must explicitly call save on embedded documents in order to save their attached files.
 You can read more about this [here](https://github.com/jnicklas/carrierwave/issues#issue/81)
