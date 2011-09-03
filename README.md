@@ -68,8 +68,6 @@ end
 
 ## Known issues and limitations
 
-It is recommended that you disable Mongoid's auto_validation on the mounted column.
-
 Note that embedded documents files aren't saved when parent documents are saved.
 You must explicitly call save on embedded documents in order to save their attached files.
 You can read more about this [here](https://github.com/jnicklas/carrierwave/issues#issue/81)
