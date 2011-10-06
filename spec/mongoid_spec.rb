@@ -210,6 +210,7 @@ describe CarrierWave::Mongoid do
     before do
       mongo_user_klass = reset_mongo_class
       @doc = mongo_user_klass.new
+      @doc2 = mongo_user_klass.new
     end
 
     context "when no file is assigned" do
@@ -260,6 +261,22 @@ describe CarrierWave::Mongoid do
         @doc.image_changed?.should be_false
         @doc.image = stub_file("test.jpg")
         @doc.image_changed?.should be_true
+      end
+
+      it "should allow two files with the same name being uploaded, and still have different content" do
+        @doc.image_changed?.should be_false
+        @doc.image = stub_file("new.txt")
+        @doc.image_changed?.should be_true
+        @doc.save
+        @doc2.image_changed?.should be_false
+        @doc2.image = stub_file("duplicatefilenames/new.txt")
+        @doc2.image_changed?.should be_true
+        @doc2.save
+        @doc.reload
+        @doc2.reload
+        @doc.image.read
+        
+        @doc.image.read.should_not == @doc2.image.read
       end
 
     end
