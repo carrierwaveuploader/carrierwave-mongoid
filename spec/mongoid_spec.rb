@@ -403,6 +403,63 @@ describe CarrierWave::Mongoid do
       end
     end
 
+    describe 'with one embedded document' do
+
+      before do
+        @embedded_doc_class = define_mongo_class('MongoLocation') do
+          include Mongoid::Document
+          mount_uploader :image, @uploader
+          embedded_in :mongo_user
+        end
+
+        @class.class_eval do
+          embeds_one :mongo_location
+        end
+
+        @doc = @class.new
+        @embedded_doc = @doc.build_mongo_location
+        @embedded_doc.image = stub_file('old.jpeg')
+        @embedded_doc.save.should be_true
+      end
+
+      it "should remove old file if old file had a different path" do
+        @embedded_doc.image = stub_file('new.jpeg')
+        @embedded_doc.save.should be_true
+        File.exists?(public_path('uploads/new.jpeg')).should be_true
+        File.exists?(public_path('uploads/old.jpeg')).should be_false
+      end
+
+      it "should not remove old file if old file had a different path but config is false" do
+        @embedded_doc.image.stub!(:remove_previously_stored_files_after_update).and_return(false)
+        @embedded_doc.image = stub_file('new.jpeg')
+        @embedded_doc.save.should be_true
+        File.exists?(public_path('uploads/new.jpeg')).should be_true
+        File.exists?(public_path('uploads/old.jpeg')).should be_true
+      end
+
+      it "should not remove file if old file had the same path" do
+        @embedded_doc.image = stub_file('old.jpeg')
+        @embedded_doc.save.should be_true
+        File.exists?(public_path('uploads/old.jpeg')).should be_true
+      end
+
+      it "should not remove file if validations fail on save" do
+        @embedded_doc_class.validate { |r| r.errors.add :textfile, "FAIL!" }
+        @embedded_doc.image = stub_file('new.jpeg')
+        @embedded_doc.save.should be_false
+        File.exists?(public_path('uploads/old.jpeg')).should be_true
+      end
+
+      it "should not touch parent's dirty attributes" do
+        @class.field :title
+        @doc.title = "Title"
+        @embedded_doc.image = stub_file('new.jpeg')
+        @embedded_doc.save.should be_true
+        @doc.title.should == "Title"
+      end
+
+    end
+
     describe 'with embedded documents' do
 
       before do

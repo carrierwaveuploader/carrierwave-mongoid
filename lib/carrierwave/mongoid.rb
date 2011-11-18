@@ -43,7 +43,8 @@ module CarrierWave
             ancestors       = [[ self.metadata.key, self._parent ]].tap { |x| x.unshift([ x.first.last.metadata.key, x.first.last._parent ]) while x.first.last.embedded? }
             first_parent = ancestors.first.last
             reloaded_parent = first_parent.class.find(first_parent.to_key.first)
-            ancestors.inject(reloaded_parent) { |parent,(key,ancestor)| (parent.is_a?(Array) ? parent.find(ancestor.to_key.first) : parent).send(key) }.find(to_key.first)
+            association = ancestors.inject(reloaded_parent) { |parent,(key,ancestor)| (parent.is_a?(Array) ? parent.find(ancestor.to_key.first) : parent).send(key) }
+            association.is_a?(Array) ? association.find(to_key.first) : association
           else
             self.class.find(to_key.first)
           end
