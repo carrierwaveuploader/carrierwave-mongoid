@@ -48,7 +48,7 @@ module CarrierWave
           @path
         end
 
-        def url
+        def url(options = {})
           unless @uploader.grid_fs_access_url
             nil
           else
