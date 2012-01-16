@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "carrierwave", [">= 0.5.6"]
-  s.add_dependency "mongoid", ["~> 2.1"]
+  s.add_dependency "mongoid", [">= 2.1"]
   s.add_development_dependency "rspec", ["~> 2.6"]
   s.add_development_dependency "bson_ext", ["~> 1.3"]
   s.add_development_dependency "rake", ["~> 0.9"]
