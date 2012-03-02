@@ -48,6 +48,14 @@ module CarrierWave
             self.class.find(to_key.first)
           end
         end
+
+        def serializable_hash(options=nil)
+          hash = {}
+          self.class.uploaders.each do |column, uploader|
+            hash[column.to_s] = _mounter(:#{column}).uploader.serializable_hash
+          end
+          super(options).merge(hash)
+        end
       RUBY
     end
   end # Mongoid
