@@ -21,16 +21,20 @@ end
 
 class MongoUploader < CarrierWave::Uploader::Base; end
 
-class WhiteListUploader < CarrierWave::Uploader::Base
+class IntegrityErrorUploader < CarrierWave::Uploader::Base
+  process :monkey
+  def monkey
+    raise CarrierWave::IntegrityError
+  end
   def extension_white_list
-    %w(txt)
+    %w(jpg)
   end
 end
 
 class ProcessingErrorUploader < CarrierWave::Uploader::Base
   process :monkey
   def monkey
-    raise CarrierWave::ProcessingError, "Ohh noez!"
+    raise CarrierWave::ProcessingError
   end
   def extension_white_list
     %w(jpg)
@@ -142,7 +146,7 @@ describe CarrierWave::Mongoid do
 
     context 'when validating integrity' do
       before do
-        mongo_user_klass = reset_mongo_class(WhiteListUploader)
+        mongo_user_klass = reset_mongo_class(IntegrityErrorUploader)
         @doc = mongo_user_klass.new
         @doc.image = stub_file('test.jpg')
       end
@@ -153,7 +157,7 @@ describe CarrierWave::Mongoid do
 
       it "should use I18n for integrity error messages" do
         @doc.valid?
-        @doc.errors[:image].should == ['is not an allowed file type']
+        @doc.errors[:image].should == ['is not of an allowed file type']
 
         change_locale_and_store_translations(:pt, :mongoid => {
           :errors => {
