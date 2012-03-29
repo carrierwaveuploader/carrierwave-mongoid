@@ -68,10 +68,11 @@ end
 
 ## Known issues and limitations
 
-Note that files mounted in embedded documents aren't saved when parent documents are saved.
-This is because by default mongoid does not cascade callbacks (like `after_save`) to embedded documents.
-Therefore either you must explicitly call save on embedded documents in order to save their attached files or
-you can set a configuration option that will always cascade callbacks:
+Note that files mounted in embedded documents aren't saved when parent documents
+are saved. By default, mongoid does not cascade callbacks on embedded
+documents. In order to save the attached files on embedded documents, you must
+either explicitly call save on the embedded documents or you must configure the
+embedded association to cascade the callbacks automatically. For example:
 
 ```ruby
 class User
