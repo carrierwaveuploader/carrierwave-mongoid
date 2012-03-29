@@ -408,25 +408,7 @@ describe CarrierWave::Mongoid do
       end
     end
 
-    describe 'with embedded documents' do
-
-      before do
-        @embedded_doc_class = define_mongo_class('MongoLocation') do
-          include Mongoid::Document
-          mount_uploader :image, @uploader
-          embedded_in :mongo_user
-        end
-
-        @class.class_eval do
-          embeds_many :mongo_locations
-        end
-
-        @doc = @class.new
-        @embedded_doc = @doc.mongo_locations.build
-        @embedded_doc.image = stub_file('old.jpeg')
-        @embedded_doc.save.should be_true
-      end
-
+    shared_examples "embedded documents" do
       it "should remove old file if old file had a different path" do
         @embedded_doc.image = stub_file('new.jpeg')
         @embedded_doc.save.should be_true
@@ -462,6 +444,49 @@ describe CarrierWave::Mongoid do
         @embedded_doc.save.should be_true
         @doc.title.should == "Title"
       end
+    end
+
+
+    describe 'with document embedded as embeds_one' do
+      before do
+        @embedded_doc_class = define_mongo_class('MongoLocation') do
+          include Mongoid::Document
+          mount_uploader :image, @uploader
+          embedded_in :mongo_user
+        end
+
+        @class.class_eval do
+          embeds_one :mongo_location
+        end
+
+        @doc = @class.new
+        @embedded_doc = @doc.build_mongo_location
+        @embedded_doc.image = stub_file('old.jpeg')
+        @embedded_doc.save.should be_true
+      end
+
+      include_examples "embedded documents"
+    end
+
+    describe 'with embedded documents' do
+      before do
+        @embedded_doc_class = define_mongo_class('MongoLocation') do
+          include Mongoid::Document
+          mount_uploader :image, @uploader
+          embedded_in :mongo_user
+        end
+
+        @class.class_eval do
+          embeds_many :mongo_locations
+        end
+
+        @doc = @class.new
+        @embedded_doc = @doc.mongo_locations.build
+        @embedded_doc.image = stub_file('old.jpeg')
+        @embedded_doc.save.should be_true
+      end
+
+      include_examples "embedded documents"
 
       describe 'with double embedded documents' do
 
