@@ -69,5 +69,14 @@ end
 ## Known issues and limitations
 
 Note that files mounted in embedded documents aren't saved when parent documents are saved.
-You must explicitly call save on embedded documents in order to save their attached files.
+This is because by default mongoid does not cascade callbacks (like `after_save`) to embedded documents.
+Therefore either you must explicitly call save on embedded documents in order to save their attached files or
+you can set a configuration option that will always cascade callbacks:
+
+```ruby
+class User
+  embeds_many :pictures, cascade_callbacks: true
+end
+```
+
 You can read more about this [here](https://github.com/jnicklas/carrierwave/issues#issue/81)
