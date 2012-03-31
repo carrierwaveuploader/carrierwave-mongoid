@@ -256,7 +256,6 @@ describe CarrierWave::Mongoid do
       end
 
       it "should mark image as changed when saving a new image" do
-        pending "This isn't working with Mongoid's current Dirty module. Mongoid's *_changed? methods don't behave the same as ActiveModel's *_changed? methods."
         @doc.image_changed?.should be_false
         @doc.image = stub_file("test.jpeg")
         @doc.image_changed?.should be_true

@@ -38,6 +38,16 @@ module CarrierWave
           super
         end
 
+        # Overrides Mongoid's default dirty behavior to instead work more like
+        # ActiveRecord's. Mongoid doesn't deem an attribute as changed unless
+        # the new value is different than the original. Given that CarrierWave
+        # caches files before save, it's necessary to know that there's a
+        # pending change even though the attribute value itself might not
+        # reflect that yet.
+        def #{column}_changed?
+          changed_attributes.has_key?("#{column}")
+        end
+
         def find_previous_model_for_#{column}
           if self.embedded?
             ancestors       = [[ self.metadata.key, self._parent ]].tap { |x| x.unshift([ x.first.last.metadata.key, x.first.last._parent ]) while x.first.last.embedded? }
