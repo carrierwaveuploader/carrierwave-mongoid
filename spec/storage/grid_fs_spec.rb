@@ -66,7 +66,7 @@ shared_examples_for "a GridFS connection" do
     end
 
     it "should return an absolute URL if configured" do
-      @uploader.stub!(:grid_fs_access_url).and_return("http://example.com/images")
+      @uploader.stub!(:grid_fs_access_url).and_return("http://example.com/images/")
       @grid_fs_file.url.should == "http://example.com/images/uploads/bar.txt"
     end
 
