@@ -60,9 +60,14 @@ shared_examples_for "a GridFS connection" do
       @grid_fs_file.url.should be_nil
     end
 
-    it "should return a URL if configured" do
+    it "should return a URL path if configured" do
       @uploader.stub!(:grid_fs_access_url).and_return("/image/show")
       @grid_fs_file.url.should == "/image/show/uploads/bar.txt"
+    end
+
+    it "should return an absolute URL if configured" do
+      @uploader.stub!(:grid_fs_access_url).and_return("http://example.com/images")
+      @grid_fs_file.url.should == "http://example.com/images/uploads/bar.txt"
     end
 
     it "should be deletable" do
