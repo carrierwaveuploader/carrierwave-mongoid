@@ -64,4 +64,23 @@ module CarrierWave
   end # Mongoid
 end # CarrierWave
 
+CarrierWave::Storage.autoload :GridFS, 'carrierwave/storage/grid_fs'
+
+class CarrierWave::Uploader::Base
+  add_config :grid_fs_connection
+  add_config :grid_fs_database
+  add_config :grid_fs_host
+  add_config :grid_fs_port
+  add_config :grid_fs_username
+  add_config :grid_fs_password
+  add_config :grid_fs_access_url
+
+  configure do |config|
+    config.storage_engines[:grid_fs] = "CarrierWave::Storage::GridFS"
+    config.grid_fs_database = "carrierwave"
+    config.grid_fs_host = "localhost"
+    config.grid_fs_port = 27017
+  end
+end
+
 Mongoid::Document::ClassMethods.send(:include, CarrierWave::Mongoid)
