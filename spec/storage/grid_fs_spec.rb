@@ -38,7 +38,6 @@ shared_examples_for "a GridFS connection" do
     it "should have a file length" do
       @grid_fs_file.file_length.should == 13
     end
-
   end
 
   describe '#retrieve!' do
@@ -56,16 +55,21 @@ shared_examples_for "a GridFS connection" do
       @grid_fs_file.path.should == 'uploads/bar.txt'
     end
 
-    it "should not have a URL unless set" do
+    it "should not have a URL unless access_url is set" do
       @grid_fs_file.url.should be_nil
     end
 
-    it "should return a URL path if configured" do
+    it "should return a relative URL path if access_url is set to the root path" do
+      @uploader.stub!(:grid_fs_access_url).and_return("/")
+      @grid_fs_file.url.should == "/uploads/bar.txt"
+    end
+
+    it "should return a URL path if access_url is set to a file path" do
       @uploader.stub!(:grid_fs_access_url).and_return("/image/show")
       @grid_fs_file.url.should == "/image/show/uploads/bar.txt"
     end
 
-    it "should return an absolute URL if configured" do
+    it "should return an absolute URL if access_url is set to an absolute URL" do
       @uploader.stub!(:grid_fs_access_url).and_return("http://example.com/images/")
       @grid_fs_file.url.should == "http://example.com/images/uploads/bar.txt"
     end
@@ -73,6 +77,19 @@ shared_examples_for "a GridFS connection" do
     it "should be deletable" do
       @grid_fs_file.delete
       lambda {@grid.open('uploads/bar.txt', 'r')}.should raise_error(Mongo::GridFileNotFound)
+
+    end
+  end
+
+  describe '#retrieve! on a store_dir with leading slash' do
+    before do
+      @uploader.stub!(:store_path).with('bar.txt').and_return('/uploads/bar.txt')
+      @grid_fs_file = @storage.retrieve!('bar.txt')
+    end
+
+    it "should return a relative URL path if access_url is set to the root path" do
+      @uploader.stub!(:grid_fs_access_url).and_return("/")
+      @grid_fs_file.url.should == "/uploads/bar.txt"
     end
   end
 
@@ -131,8 +148,7 @@ describe CarrierWave::Storage::GridFS do
       end
     end
 
-
-   describe "resize_to_fill" do
+    describe "resize_to_fill" do
       before do
         @uploader_class = Class.new(CarrierWave::Uploader::Base)
         @uploader_class.class_eval{

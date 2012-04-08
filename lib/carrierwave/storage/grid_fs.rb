@@ -52,7 +52,7 @@ module CarrierWave
           unless @uploader.grid_fs_access_url
             nil
           else
-            [@uploader.grid_fs_access_url.chomp("/"), @path].join("/")
+            ::File.join(@uploader.grid_fs_access_url, @path)
           end
         end
 
