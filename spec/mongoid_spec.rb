@@ -97,6 +97,31 @@ describe CarrierWave::Mongoid do
         @doc.image.current_path.should == public_path('uploads/test.jpg')
       end
 
+      it "should return valid JSON when to_json is called when image is nil" do
+        @doc[:image] = nil
+        hash = JSON.parse(@doc.to_json)
+        hash.keys.should include("image")
+        hash["image"].keys.should include("url")
+        hash["image"]["url"].should be_nil
+      end
+
+      it "should return valid JSON when to_json is called when image is present" do
+        @doc[:image] = 'test.jpeg'
+        @doc.save!
+        @doc.reload
+
+        JSON.parse(@doc.to_json)["image"].should == {"url" => "/uploads/test.jpeg"}
+      end
+
+      it "should return valid JSON when to_json is called on a collection containing uploader from a model" do
+        @doc[:image] = 'test.jpeg'
+        @doc.save!
+        @doc.reload
+
+        JSON.parse({:data => @doc.image}.to_json).should == {"data"=>{"image"=>{"url"=>"/uploads/test.jpeg"}}}
+      end
+
+
     end
 
   end
