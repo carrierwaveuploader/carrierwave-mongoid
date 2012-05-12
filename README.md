@@ -24,7 +24,7 @@ Follow the "Getting Started" directions in the main [Carrierwave repository](htt
 
 Add a fields to the model you want to mount the uploader on:
 
-    field :last_name, type: String
+    field :avatar, type: String
 
 [Suggested] Add the field to your attr_accessor list for mass assignment protection:
 
