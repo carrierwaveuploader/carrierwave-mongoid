@@ -6,19 +6,39 @@ This functionality used to be part of CarrierWave but has since been extracted i
 
 ## Installation
 
+Install the latest release:
+
     gem install carrierwave-mongoid
 
-## Requiring the gem
+Require it in you code:
 
     require 'carrierwave/mongoid'
 
-## Using Bundler
+In Rails, add it to your Gemfile:
 
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 
+## Getting Started
+
+Follow the "Getting Started" directions in the main [Carrierwave repository](https://raw.github.com/jnicklas/carrierwave/).
+
+Add a fields to the model you want to mount the uploader on:
+
+    field :last_name, type: String
+
+[Suggested] Add the field to your attr_accessor list for mass assignment protection:
+
+    attr_accessible :avatar, :avatar_cache
+
+Now you can cache files by assigning them to the attribute, they will automatically be stored when the record is saved. Ex:
+
+    u = User.new
+    u.avatar = File.open('somewhere')
+    u.save!
+
 ## Using MongoDB's GridFS store
 
-You'll need to configure the database and host to use:
+Optionally, you can configure Carrierwave use GridFS instead of the filesystem.  To do so:
 
 ```ruby
 CarrierWave.configure do |config|
