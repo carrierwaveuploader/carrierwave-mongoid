@@ -50,7 +50,7 @@ end
 
 ## Version differences
 
-### 0.2.0
+### 0.2.x
 
 carrierwave-mongoid ~> 0.2.0 is only compatible with Rails 3.2 or higher.
 
