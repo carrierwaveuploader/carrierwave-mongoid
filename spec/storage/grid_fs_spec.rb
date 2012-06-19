@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require 'spec_helper'
-require 'mongo'
 
 shared_examples_for "a GridFS connection" do
   describe '#store!' do
