@@ -6,7 +6,7 @@ require 'carrierwave/mongoid'
 def reset_mongo_class(uploader = MongoUploader)
   define_mongo_class('MongoUser') do
     include Mongoid::Document
-    store_in :users
+    store_in :collection => 'users'
     field :folder, :default => ''
     mount_uploader :image, uploader
   end
@@ -45,7 +45,7 @@ end
 describe CarrierWave::Mongoid do
 
   after do
-    MongoUser.collection.drop
+    MongoUser.collection.drop if MongoUser.count > 0
   end
 
   describe '#image' do
