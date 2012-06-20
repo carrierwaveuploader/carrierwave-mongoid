@@ -1,8 +1,10 @@
 # CarrierWave for Mongoid
 
-This gem adds support for Mongoid and MongoDB's GridFS to [CarrierWave](https://github.com/jnicklas/carrierwave/)
+This gem adds support for Mongoid and MongoDB's GridFS to
+[CarrierWave](https://github.com/jnicklas/carrierwave/)
 
-This functionality used to be part of CarrierWave but has since been extracted into this gem.
+This functionality used to be part of CarrierWave but has since been extracted
+into this gem.
 
 ## Installation
 
@@ -20,13 +22,16 @@ Or, in Rails you can add it to your Gemfile:
 
 ## Getting Started
 
-Follow the "Getting Started" directions in the main [Carrierwave repository](https://raw.github.com/jnicklas/carrierwave/).
+Follow the "Getting Started" directions in the main
+[Carrierwave repository](https://raw.github.com/jnicklas/carrierwave/).
 
-[Suggested] Add the field to your attr_accessor list for mass assignment protection:
+[Suggested] Add the field to your attr_accessor list for mass assignment
+protection:
 
     attr_accessible :avatar, :avatar_cache
 
-Now you can cache files by assigning them to the attribute; they will automatically be stored when the record is saved. Ex:
+Now you can cache files by assigning them to the attribute; they will
+automatically be stored when the record is saved. Ex:
 
     u = User.new
     u.avatar = File.open('somewhere')
@@ -34,7 +39,7 @@ Now you can cache files by assigning them to the attribute; they will automatica
 
 ## Using MongoDB's GridFS store
 
-Optionally, you can configure Carrierwave to use GridFS instead of the filesystem.  Ex:
+You can configure Carrierwave to use GridFS instead of the filesystem. For example:
 
 ```ruby
 CarrierWave.configure do |config|
@@ -55,12 +60,25 @@ end
 
 Since GridFS doesn't make the files available via HTTP, you'll need to stream
 them yourself. In Rails for example, you could use the `send_data` method. You
-can tell CarrierWave the URL you will serve your images from, allowing it to
-generate the correct URL, by setting eg:
+can optionally tell CarrierWave the URL you will serve your images from,
+allowing it to generate the correct URL, by setting eg:
 
 ```ruby
 CarrierWave.configure do |config|
   config.grid_fs_access_url = "/image/show"
+end
+```
+
+Bringing it all together, you can also configure Carrierwave to use Mongoid's
+database connection and default all storage to GridFS. That might look something
+like this:
+
+```ruby
+CarrierWave.configure do |config|
+  config.grid_fs_connection = Mongoid.database
+  config.storage = :grid_fs
+  config.root = Rails.root.join('tmp')
+  config.cache_dir = "uploads"
 end
 ```
 
