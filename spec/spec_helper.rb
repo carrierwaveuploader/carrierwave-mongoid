@@ -2,6 +2,7 @@ require 'rubygems'
 require 'bundler/setup'
 require 'rspec'
 require 'tempfile'
+require 'stringio'
 
 require 'carrierwave'
 require 'carrierwave/mongoid'
@@ -55,6 +56,15 @@ module CarrierWave
         end
       end
     end
+  end
+end
+
+class SIO < StringIO 
+  attr_accessor :filename 
+ 
+  def initialize(filename, *args, &block) 
+    @filename = filename 
+    super(*args, &block) 
   end
 end
 
