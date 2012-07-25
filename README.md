@@ -34,18 +34,7 @@ Now you can cache files by assigning them to the attribute; they will automatica
 
 ## Using MongoDB's GridFS store
 
-Optionally, you can configure Carrierwave to use GridFS instead of the filesystem.  Ex:
-
-```ruby
-CarrierWave.configure do |config|
-  config.grid_fs_database = 'my_mongo_database'
-  config.grid_fs_host = 'mongo.example.com'
-end
-```
-
-The defaults are `carrierwave` and `localhost`.
-
-And then in your uploader, set the storage to `:grid_fs`:
+In your uploader, set the storage to `:grid_fs`:
 
 ```ruby
 class AvatarUploader < CarrierWave::Uploader::Base
@@ -60,7 +49,7 @@ generate the correct URL, by setting eg:
 
 ```ruby
 CarrierWave.configure do |config|
-  config.grid_fs_access_url = "/image/show"
+  config.grid_fs_access_url = "/systems/uploads"
 end
 ```
 

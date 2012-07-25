@@ -1,5 +1,6 @@
 pkg/*
 *.gem
+*.sw*
 .bundle
 spec/public
 .rvmrc
