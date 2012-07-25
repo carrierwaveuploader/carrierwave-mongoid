@@ -111,7 +111,7 @@ describe CarrierWave::Storage::GridFS do
     before do
       @uploader.stub!(:grid_fs_connection).and_return(@database)
 
-      @grid = ::GridFs
+      @grid = ::Mongoid::GridFs
 
       @storage = CarrierWave::Storage::GridFS.new(@uploader)
       @file = stub_tempfile('test.jpg', 'application/xml')

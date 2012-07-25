@@ -70,7 +70,7 @@ module CarrierWave
           attr_accessor :grid
         end
 
-        self.grid = ::GridFS
+        self.grid = ::Mongoid::GridFS
 
         def grid
           self.class.grid

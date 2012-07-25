@@ -80,7 +80,7 @@ class CarrierWave::Uploader::Base
 
   configure do |config|
     config.storage_engines[:grid_fs] = "CarrierWave::Storage::GridFS"
-
+    
     config.grid_fs_access_url = "/"
 
     if defined?(Rails.root)
