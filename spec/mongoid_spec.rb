@@ -121,6 +121,20 @@ describe CarrierWave::Mongoid do
         JSON.parse({:data => @doc.image}.to_json).should == {"data"=>{"image"=>{"url"=>"/uploads/test.jpeg"}}}
       end
 
+      it "should respect options[:only] when passed to to_json for the serializable hash" do
+        @doc[:image] = 'test.jpeg'
+        @doc.save!
+        @doc.reload
+        JSON.parse(@doc.to_json({:only => [:_id]})).should == {"_id" => @doc.id.to_s}
+      end
+
+      it "should respect options[:except] when passed to to_json for the serializable hash" do
+        @doc[:image] = 'test.jpeg'
+        @doc.save!
+        @doc.reload
+
+        JSON.parse(@doc.to_json({:except => [:_id, :image]})).should == {"folder" => ""}
+      end
 
     end
 
