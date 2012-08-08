@@ -6,6 +6,11 @@ require 'carrierwave/validations/active_model'
 
 module CarrierWave
   module Mongoid
+
+    def self.is_mongoid_3_x?
+      ::Mongoid::VERSION >= "3.0"
+    end
+
     include CarrierWave::Mount
     ##
     # See +CarrierWave::Mount#mount_uploader+ for documentation
@@ -74,22 +79,25 @@ module CarrierWave
   end # Mongoid
 end # CarrierWave
 
-CarrierWave::Storage.autoload :GridFS, 'carrierwave/storage/grid_fs'
+# Mongoid 3.x doesn't support GridFS
+unless CarrierWave::Mongoid.is_mongoid_3_x?
+  CarrierWave::Storage.autoload :GridFS, 'carrierwave/storage/grid_fs'
 
-class CarrierWave::Uploader::Base
-  add_config :grid_fs_connection
-  add_config :grid_fs_database
-  add_config :grid_fs_host
-  add_config :grid_fs_port
-  add_config :grid_fs_username
-  add_config :grid_fs_password
-  add_config :grid_fs_access_url
+  class CarrierWave::Uploader::Base
+    add_config :grid_fs_connection
+    add_config :grid_fs_database
+    add_config :grid_fs_host
+    add_config :grid_fs_port
+    add_config :grid_fs_username
+    add_config :grid_fs_password
+    add_config :grid_fs_access_url
 
-  configure do |config|
-    config.storage_engines[:grid_fs] = "CarrierWave::Storage::GridFS"
-    config.grid_fs_database = "carrierwave"
-    config.grid_fs_host = "localhost"
-    config.grid_fs_port = 27017
+    configure do |config|
+      config.storage_engines[:grid_fs] = "CarrierWave::Storage::GridFS"
+      config.grid_fs_database = "carrierwave"
+      config.grid_fs_host = "localhost"
+      config.grid_fs_port = 27017
+    end
   end
 end
 
