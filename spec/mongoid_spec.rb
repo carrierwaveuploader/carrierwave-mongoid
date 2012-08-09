@@ -7,7 +7,7 @@ def reset_mongo_class(uploader = MongoUploader)
   define_mongo_class('MongoUser') do
     include Mongoid::Document
     if CarrierWave::Mongoid.is_mongoid_3_x?
-      store_in collection => :users
+      store_in :collection => :users
     else
       store_in :users
     end
