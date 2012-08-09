@@ -1,0 +1,12 @@
+source "http://rubygems.org"
+
+group :development, :test do
+  gem 'json', :platforms => [:jruby, :ruby_18]
+  gem 'bson_ext', '~> 1.3', :platforms => :ruby
+end
+
+gem 'carrierwave', '>= 0.6.1'
+gem 'mongoid', '~> 2.1'
+gem 'rspec', '~> 2.6'
+gem 'rake', '~> 0.9'
+gem 'mini_magick'
