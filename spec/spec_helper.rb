@@ -6,11 +6,17 @@ require 'tempfile'
 require 'carrierwave'
 require 'carrierwave/mongoid'
 
-Mongoid.configure do |config|
-  logger = Logger.new('log/test.log')
-  config.logger = logger
-  config.master = Mongo::Connection.new('localhost', 27017,
+logger = Logger.new('log/test.log')
+if CarrierWave::Mongoid.is_mongoid_3_x?
+  Mongoid.load!(File.join(File.dirname(__FILE__), "config/mongoid_3_x_config.yml"), :test)
+  Mongoid.logger = logger
+  Moped.logger = logger
+else
+  Mongoid.configure do |config|
+    config.logger = logger
+    config.master = Mongo::Connection.new('localhost', 27017,
     :logger => logger).db('carrierwave_test')
+  end
 end
 
 def file_path( *paths )

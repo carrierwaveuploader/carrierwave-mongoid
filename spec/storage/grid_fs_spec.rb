@@ -1,4 +1,5 @@
 # encoding: utf-8
+unless CarrierWave::Mongoid.is_mongoid_3_x?
 
 require 'spec_helper'
 require 'mongo'
@@ -196,5 +197,6 @@ describe CarrierWave::Storage::GridFS do
   after do
     @grid.delete('uploads/bar.txt')
   end
+end
 
 end

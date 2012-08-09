@@ -1,0 +1,9 @@
+test:
+  sessions:
+    default:
+      database: carrierwave_test
+      hosts:
+        - localhost:27017
+      options:
+        consistency: :strong
+        safe: true
