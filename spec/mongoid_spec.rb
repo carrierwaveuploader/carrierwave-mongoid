@@ -20,6 +20,7 @@ def define_mongo_class(class_name, &block)
 end
 
 class MongoUploader < CarrierWave::Uploader::Base; end
+class AnotherMongoUploader < CarrierWave::Uploader::Base; end
 
 class IntegrityErrorUploader < CarrierWave::Uploader::Base
   process :monkey
@@ -754,7 +755,7 @@ describe CarrierWave::Mongoid do
   context "with multiple uploaders" do
     before do
       @class = reset_mongo_class
-      @class.send(:mount_uploader, :textfile,MongoUploader)
+      @class.send(:mount_uploader, :textfile,AnotherMongoUploader)
       @event = @class.new
       @event.image = stub_file('old.jpeg')
       @event.textfile = stub_file('old.txt')
