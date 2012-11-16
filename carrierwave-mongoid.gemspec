@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "carrierwave", ["~> 0.6.1"]
   s.add_dependency "mongoid", ["~> 3.0.0"]
+  s.add_dependency "mongoid-grids_fs", ["~> 1.3.1"]
   s.add_development_dependency "rspec", ["~> 2.6"]
   s.add_development_dependency "rake", ["~> 0.9"]
   s.add_development_dependency "mini_magick"
