@@ -20,6 +20,7 @@ def define_mongo_class(class_name, &block)
 end
 
 class MongoUploader < CarrierWave::Uploader::Base; end
+class AnotherMongoUploader < CarrierWave::Uploader::Base; end
 
 class IntegrityErrorUploader < CarrierWave::Uploader::Base
   process :monkey
@@ -185,12 +186,12 @@ describe CarrierWave::Mongoid do
         @doc.errors[:image].should == ['is not of an allowed file type']
 
         change_locale_and_store_translations(:pt, :mongoid => {
-          :errors => {
-          :messages => {
-          :carrierwave_integrity_error => 'tipo de imagem não permitido.'
-        }
-        }
-        }) do
+            :errors => {
+              :messages => {
+                :carrierwave_integrity_error => 'tipo de imagem não permitido.'
+              }
+            }
+          }) do
           @doc.should_not be_valid
           @doc.errors[:image].should == ['tipo de imagem não permitido.']
         end
@@ -213,12 +214,12 @@ describe CarrierWave::Mongoid do
         @doc.errors[:image].should == ['failed to be processed']
 
         change_locale_and_store_translations(:pt, :mongoid => {
-          :errors => {
-          :messages => {
-          :carrierwave_processing_error => 'falha ao processar imagem.'
-        }
-        }
-        }) do
+            :errors => {
+              :messages => {
+                :carrierwave_processing_error => 'falha ao processar imagem.'
+              }
+            }
+          }) do
           @doc.should_not be_valid
           @doc.errors[:image].should == ['falha ao processar imagem.']
         end
@@ -750,5 +751,25 @@ describe CarrierWave::Mongoid do
       File.exists?(public_path('uploads/old.jpeg')).should be_true
     end
   end
+  
+  context "with multiple uploaders" do
+    before do
+      @class = reset_mongo_class
+      @class.send(:mount_uploader, :textfile,AnotherMongoUploader)
+      @event = @class.new
+      @event.image = stub_file('old.jpeg')
+      @event.textfile = stub_file('old.txt')
+    end
+    
+    it "serializes the correct values" do
+      @event.serializable_hash["image"]["url"].should match(/old\.jpeg$/)
+      @event.serializable_hash["textfile"]["url"].should match(/old\.txt$/)
+    end
 
+    it "should have JSON for each uploader" do
+      parsed = JSON.parse(@event.to_json)
+      parsed["image"]["url"].should match(/old\.jpeg$/)
+      parsed["textfile"]["url"].should match(/old\.txt$/)
+    end
+  end
 end
