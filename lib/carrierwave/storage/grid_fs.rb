@@ -1,5 +1,4 @@
 # encoding: utf-8
-require 'mongo'
 
 module CarrierWave
   module Storage
@@ -7,42 +6,29 @@ module CarrierWave
     ##
     # The GridFS store uses MongoDB's GridStore file storage system to store files
     #
-    # There are two ways of configuring the GridFS connection. Either you create a
-    # connection or you reuse an existing connection.
-    #
-    # Creating a connection looks something like this:
-    #
-    #     CarrierWave.configure do |config|
-    #       config.storage = :grid_fs
-    #       config.grid_fs_host = "your-host.com"
-    #       config.grid_fs_port = "27017"
-    #       config.grid_fs_database = "your_dbs_app_name"
-    #       config.grid_fs_username = "user"
-    #       config.grid_fs_password = "verysecret"
-    #       config.grid_fs_access_url = "/images"
-    #     end
-    #
-    #   In the above example your documents url will look like:
-    #
-    #      http://your-app.com/images/:document-identifier-here
-    #
     # When you already have a Mongo connection object (for example through Mongoid)
     # you can also reuse this connection:
     #
     #     CarrierWave.configure do |config|
     #       config.storage = :grid_fs
-    #       config.grid_fs_connection = Mongoid.database
-    #       config.grid_fs_access_url = "/images"
+    #       config.grid_fs_access_url = "/system/uploads"
     #     end
+    #
+    #   In the above example your documents url will look like:
+    #
+    #      http://your-app.com/system/uploads/:document-identifier-here
     #
     class GridFS < Abstract
 
       class File
         attr_reader :path
+        attr_reader :uploader
+        attr_reader :grid_file
 
         def initialize(uploader, path)
           @path = path
           @uploader = uploader
+          @grid_file = nil
         end
 
         def url
@@ -53,48 +39,42 @@ module CarrierWave
           end
         end
 
-        def read
-          grid.open(path, 'r').data
+        def grid_file(&block)
+          @grid_file ||= grid[path]
         end
 
         def write(file)
-          grid.open(@uploader.store_path, 'w', :content_type => file.content_type) do |f|
-            f.write(file.read)
-          end
+          grid[@uploader.store_path] = file
+        ensure
+          @grid_file = nil
         end
 
-        def delete
-          grid.delete(path)
+        def read
+          grid_file.data if grid_file
         end
 
-        def content_type
-          grid.open(path, 'r').content_type
+        %w( delete content_type length ).each do |method|
+          class_eval <<-__, __FILE__, __LINE__
+            def #{ method }
+              grid_file.#{ method } if grid_file
+            end
+          __
         end
 
-        def file_length
-          grid.open(path, 'r').file_length
-        end
-        alias :size :file_length
+        alias :content_length :length
+        alias :file_length :length
+        alias :size :length
 
       protected
-
-        def database
-          @connection ||= @uploader.grid_fs_connection || begin
-            host = @uploader.grid_fs_host
-            port = @uploader.grid_fs_port
-            database = @uploader.grid_fs_database
-            username = @uploader.grid_fs_username
-            password = @uploader.grid_fs_password
-            db = Mongo::Connection.new(host, port).db(database)
-            db.authenticate(username, password) if username && password
-            db
-          end
+        class << File
+          attr_accessor :grid
         end
+
+        self.grid = ::Mongoid::GridFS
 
         def grid
-          @grid ||= Mongo::GridFileSystem.new(database)
+          self.class.grid
         end
-
       end
 
       ##

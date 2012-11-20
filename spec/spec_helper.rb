@@ -2,15 +2,13 @@ require 'rubygems'
 require 'bundler/setup'
 require 'rspec'
 require 'tempfile'
+require 'stringio'
 
 require 'carrierwave'
 require 'carrierwave/mongoid'
 
 Mongoid.configure do |config|
-  logger = Logger.new('log/test.log')
-  config.logger = logger
-  config.master = Mongo::Connection.new('localhost', 27017,
-    :logger => logger).db('carrierwave_test')
+  config.connect_to('carrierwave_test')
 end
 
 def file_path( *paths )
@@ -58,6 +56,15 @@ module CarrierWave
         end
       end
     end
+  end
+end
+
+class SIO < StringIO 
+  attr_accessor :filename 
+ 
+  def initialize(filename, *args, &block) 
+    @filename = filename 
+    super(*args, &block) 
   end
 end
 
