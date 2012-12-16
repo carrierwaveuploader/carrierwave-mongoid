@@ -57,7 +57,7 @@ module CarrierWave
             association = ancestors.inject(reloaded_parent) { |parent,(key,ancestor)| (parent.is_a?(Array) ? parent.find(ancestor.to_key.first) : parent).send(key) }
             association.is_a?(Array) ? association.find(to_key.first) : association
           else
-            self.class.unscoped.for_ids(to_key.first).first
+            self.class.unscoped.for_ids(Array(to_key.first)).first
           end
         end
 
