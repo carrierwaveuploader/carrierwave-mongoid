@@ -39,18 +39,7 @@ automatically be stored when the record is saved. Ex:
 
 ## Using MongoDB's GridFS store
 
-You can configure Carrierwave to use GridFS instead of the filesystem. For example:
-
-```ruby
-CarrierWave.configure do |config|
-  config.grid_fs_database = 'my_mongo_database'
-  config.grid_fs_host = 'mongo.example.com'
-end
-```
-
-The defaults are `carrierwave` and `localhost`.
-
-And then in your uploader, set the storage to `:grid_fs`:
+In your uploader, set the storage to `:grid_fs`:
 
 ```ruby
 class AvatarUploader < CarrierWave::Uploader::Base
@@ -65,7 +54,7 @@ allowing it to generate the correct URL, by setting eg:
 
 ```ruby
 CarrierWave.configure do |config|
-  config.grid_fs_access_url = "/image/show"
+  config.grid_fs_access_url = "/systems/uploads"
 end
 ```
 
