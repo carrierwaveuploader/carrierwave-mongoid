@@ -20,6 +20,7 @@ def define_mongo_class(class_name, &block)
 end
 
 class MongoUploader < CarrierWave::Uploader::Base; end
+class AnotherMongoUploader < CarrierWave::Uploader::Base; end
 
 class IntegrityErrorUploader < CarrierWave::Uploader::Base
   process :monkey
@@ -762,6 +763,29 @@ describe CarrierWave::Mongoid do
       @doc.avatar = stub_file('old.jpeg')
       @doc.save.should be_true
       File.exists?(public_path('uploads/old.jpeg')).should be_true
+    end
+  end
+
+  
+  context "JSON serialization with multiple uploaders" do
+    before do
+      @class = reset_mongo_class
+      @class.send(:mount_uploader, :textfile,AnotherMongoUploader)
+      @event = @class.new
+      @event.image = stub_file('old.jpeg')
+      @event.textfile = stub_file('old.txt')
+    end
+
+    it "serializes the correct values" do
+      puts @event.serializable_hash
+      @event.serializable_hash["image"]["url"].should match(/old\.jpeg$/)
+      @event.serializable_hash["textfile"]["url"].should match(/old\.txt$/)
+    end
+
+    it "should have JSON for each uploader" do
+      parsed = JSON.parse(@event.to_json)
+      parsed["image"]["url"].should match(/old\.jpeg$/)
+      parsed["textfile"]["url"].should match(/old\.txt$/)
     end
   end
 
