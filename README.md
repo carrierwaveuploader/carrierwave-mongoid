@@ -1,4 +1,4 @@
-# CarrierWave for Mongoid
+# CarrierWave for Mongoid [![Build Status](https://travis-ci.org/jnicklas/carrierwave-mongoid.png?branch=master)](http://travis-ci.org/jnicklas/carrierwave-mongoid)
 
 This gem adds support for Mongoid and MongoDB's GridFS to
 [CarrierWave](https://github.com/jnicklas/carrierwave/)
