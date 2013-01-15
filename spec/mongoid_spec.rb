@@ -766,7 +766,6 @@ describe CarrierWave::Mongoid do
     end
   end
 
-  
   context "JSON serialization with multiple uploaders" do
     before do
       @class = reset_mongo_class
@@ -777,7 +776,6 @@ describe CarrierWave::Mongoid do
     end
 
     it "serializes the correct values" do
-      puts @event.serializable_hash
       @event.serializable_hash["image"]["url"].should match(/old\.jpeg$/)
       @event.serializable_hash["textfile"]["url"].should match(/old\.txt$/)
     end
