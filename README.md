@@ -72,6 +72,10 @@ end
 
 ## Version differences
 
+### 0.3.x
+
+carrierwave-mongoid ~> 0.3.0 is only compatible with Mongoid 3.0 or higher.
+
 ### 0.2.x
 
 carrierwave-mongoid ~> 0.2.0 is only compatible with Rails 3.2 or higher.
