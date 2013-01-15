@@ -64,7 +64,6 @@ like this:
 
 ```ruby
 CarrierWave.configure do |config|
-  config.grid_fs_connection = Mongoid.database
   config.storage = :grid_fs
   config.root = Rails.root.join('tmp')
   config.cache_dir = "uploads"
