@@ -57,14 +57,16 @@ module CarrierWave
             association = ancestors.inject(reloaded_parent) { |parent,(key,ancestor)| (parent.is_a?(Array) ? parent.find(ancestor.to_key.first) : parent).send(key) }
             association.is_a?(Array) ? association.find(to_key.first) : association
           else
-            self.class.unscoped.find(to_key.first)
+            self.class.unscoped.for_ids(to_key).first
           end
         end
 
         def serializable_hash(options=nil)
           hash = {}
           self.class.uploaders.each do |column, uploader|
-            hash[column.to_s] = _mounter(:#{column}).uploader.serializable_hash
+            if (!options[:only] && !options[:except]) || (options[:only] && options[:only].include?(column)) || (options[:except] && !options[:except].include?(column))
+              hash[column.to_s] = _mounter(column.to_sym).uploader.serializable_hash
+            end
           end
           super(options).merge(hash)
         end
