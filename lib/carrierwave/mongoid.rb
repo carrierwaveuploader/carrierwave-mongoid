@@ -64,8 +64,8 @@ module CarrierWave
         def serializable_hash(options=nil)
           hash = {}
           self.class.uploaders.each do |column, uploader|
-            if (!options[:only] && !options[:except]) || (options[:only] && options[:only].include?(column)) || (options[:except] && !options[:except].include?(column))
-              hash[column.to_s] = _mounter(:#{column}).uploader.serializable_hash
+            if !options || (!options[:only] && !options[:except]) || (options[:only] && options[:only].include?(column)) || (options[:except] && !options[:except].include?(column))
+              hash[column.to_s] = _mounter(column.to_sym).uploader.serializable_hash
             end
           end
           super(options).merge(hash)
