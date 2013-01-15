@@ -6,8 +6,6 @@ This gem adds support for Mongoid and MongoDB's GridFS to
 This functionality used to be part of CarrierWave but has since been extracted
 into this gem.
 
-"Note" The require has changed from `carrierwave/orm/mongoid` to `carrierwave/mongoid` with the extraction to this separate gem.
-
 ## Installation
 
 Install the latest release:
