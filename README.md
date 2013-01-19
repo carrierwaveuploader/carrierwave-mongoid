@@ -88,7 +88,7 @@ carrierwave is only compatible with Rails 3.1 or earlier.
 ### Changes from earlier versions of CarrierWave <= 0.5.6
 
 CarrierWave used to have built-in Mongoid support. This gem replaces that
-support and only only supports Mongoid ~> 2.1
+support and only supports Mongoid ~> 2.1
 
 You can use `upload_identifier` to retrieve the original name of the uploaded file.
 
