@@ -75,7 +75,7 @@ module CarrierWave
         def grid
           self.class.grid
         end
-      end
+      end # File
 
       ##
       # Store the file in MongoDB's GridFS GridStore
@@ -109,6 +109,6 @@ module CarrierWave
         CarrierWave::Storage::GridFS::File.new(uploader, uploader.store_path(identifier))
       end
 
-    end # File
+    end # GridFS
   end # Storage
 end # CarrierWave
