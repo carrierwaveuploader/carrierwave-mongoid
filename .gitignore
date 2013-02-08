@@ -4,5 +4,6 @@ pkg/*
 .bundle
 spec/public
 .rvmrc
+.ruby-version
 Gemfile.lock
 log/*
