@@ -39,6 +39,10 @@ module CarrierWave
           super
         end
 
+        def remove_#{column}!
+          super unless paranoid? && flagged_for_destroy?
+        end
+
         # Overrides Mongoid's default dirty behavior to instead work more like
         # ActiveRecord's. Mongoid doesn't deem an attribute as changed unless
         # the new value is different than the original. Given that CarrierWave
