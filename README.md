@@ -81,12 +81,12 @@ end
 
 [compare-0.4]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.3.1...v0.4.0
 [compare-0.3]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.2.1...v0.3.1
-[compare-0.2]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.1.7...v0.2.1
+[compare-0.2]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.1.7...v0.2.2
 [compare-0.1]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.1.1...v0.1.7
 
 [deps-0.4]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.4.0
 [deps-0.3]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.3.1
-[deps-0.2]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.2.1
+[deps-0.2]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.2.2
 [deps-0.1]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.1.7
 
 ### Changes from earlier versions of CarrierWave <= 0.5.6
