@@ -72,12 +72,22 @@ end
 
 ## Version differences
 
-| Version  | Notes                                                              |
-|----------|--------------------------------------------------------------------|
-| ~> 0.4.0 | Depends on carrierwave ~> 0.8.0                                    |
-| ~> 0.3.0 | Only compatible with Mongoid >= 3.0                                |
-| ~> 0.2.0 | Only compatible with Rails >= 3.2                                  |
-| ~> 0.1.0 | Depends on carrierwave ~> 0.5.7; Only compatible with Rails <= 3.1 |
+| Version  | Notes                                                                           |
+|----------|---------------------------------------------------------------------------------|
+| ~> 0.4.0 | ([compare][compare-0.4], [dependencies][deps-0.4])                              |
+| ~> 0.3.0 | ([compare][compare-0.3], [dependencies][deps-0.3]) Mongoid >= 3.0               |
+| ~> 0.2.0 | ([compare][compare-0.2], [dependencies][deps-0.2]) Rails >= 3.2, Mongoid ~> 2.0 |
+| ~> 0.1.0 | ([compare][compare-0.1], [dependencies][deps-0.1]) Rails <= 3.1                 |
+
+[compare-0.4]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.3.1...v0.4.0
+[compare-0.3]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.2.1...v0.3.1
+[compare-0.2]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.1.7...v0.2.1
+[compare-0.1]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.1.1...v0.1.7
+
+[deps-0.4]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.4.0
+[deps-0.3]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.3.1
+[deps-0.2]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.2.1
+[deps-0.1]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.1.7
 
 ### Changes from earlier versions of CarrierWave <= 0.5.6
 
