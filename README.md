@@ -14,11 +14,15 @@ Install the latest release:
 
 Require it in your code:
 
-    require 'carrierwave/mongoid'
+```ruby
+require 'carrierwave/mongoid'
+```
 
 Or, in Rails you can add it to your Gemfile:
 
-    gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+```ruby
+gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+```
 
 ## Getting Started
 
@@ -28,14 +32,18 @@ Follow the "Getting Started" directions in the main
 [Suggested] Add the field to your attr_accessor list for mass assignment
 protection:
 
-    attr_accessible :avatar, :avatar_cache
+```ruby
+attr_accessible :avatar, :avatar_cache
+```
 
 Now you can cache files by assigning them to the attribute; they will
 automatically be stored when the record is saved. Ex:
 
-    u = User.new
-    u.avatar = File.open('somewhere')
-    u.save!
+```ruby
+u = User.new
+u.avatar = File.open('somewhere')
+u.save!
+```
 
 ## Using MongoDB's GridFS store
 
