@@ -676,7 +676,7 @@ describe CarrierWave::Mongoid do
         end
 
         @class.class_eval do
-          embeds_many :mongo_locations
+          embeds_many :mongo_locations, cascade_callbacks: true
           accepts_nested_attributes_for :mongo_locations
         end
 
@@ -689,6 +689,13 @@ describe CarrierWave::Mongoid do
         @doc.reload
         @doc.mongo_locations.first.image.path.should match(/old\.jpeg$/)
         @embedded_doc.image.path.should match(/old\.jpeg$/)
+      end
+
+      it "should update the image on update_attributes" do
+        @doc.update_attributes(mongo_locations_attributes: [{id: @embedded_doc.id, image: stub_file("new.jpeg")}]).should be_true
+        @doc.reload
+        @doc.mongo_locations.first.image.path.should match(/new\.jpeg$/)
+        @embedded_doc.image.path.should match(/new\.jpeg$/)
       end
     end
   end
