@@ -1,0 +1,6 @@
+source "https://rubygems.org"
+
+gem "mongoid-grid_fs", github: "ahoward/mongoid-grid_fs", branch: "master"
+gem "mongoid", github: "mongoid/mongoid", branch: "master"
+
+gemspec path: "../"

@@ -766,30 +766,34 @@ describe CarrierWave::Mongoid do
     end
   end
 
-  describe "with paranoia enabled" do
-    before do
-      @class = reset_mongo_class
-      @class.collection.drop
-      @class.class_eval do
-        include Mongoid::Paranoia
+  # Mongoid::Paranoia support is only part of Mongoid 3.x. It was removed from
+  # Mongoid 4.x.
+  if defined?(Mongoid::Paranoia)
+    describe "with paranoia enabled" do
+      before do
+        @class = reset_mongo_class
+        @class.collection.drop
+        @class.class_eval do
+          include Mongoid::Paranoia
+        end
+
+        @doc = @class.new(image: stub_file("old.jpeg"))
+        @doc.save.should be_true
       end
 
-      @doc = @class.new(image: stub_file("old.jpeg"))
-      @doc.save.should be_true
-    end
+      it "should not remove underlying image after #destroy" do
+        @doc.destroy.should be_true
+        @class.count.should eql(0)
+        @class.deleted.count.should eql(1)
+        File.exist?(public_path('uploads/old.jpeg')).should be_true
+      end
 
-    it "should not remove underlying image after #destroy" do
-      @doc.destroy.should be_true
-      @class.count.should eql(0)
-      @class.deleted.count.should eql(1)
-      File.exist?(public_path('uploads/old.jpeg')).should be_true
-    end
-
-    it "should remove underlying image after #destroy!" do
-      @doc.destroy!.should be_true
-      @class.count.should eql(0)
-      @class.deleted.count.should eql(0)
-      File.exist?(public_path('uploads/old.jpeg')).should be_false
+      it "should remove underlying image after #destroy!" do
+        @doc.destroy!.should be_true
+        @class.count.should eql(0)
+        @class.deleted.count.should eql(0)
+        File.exist?(public_path('uploads/old.jpeg')).should be_false
+      end
     end
   end
 

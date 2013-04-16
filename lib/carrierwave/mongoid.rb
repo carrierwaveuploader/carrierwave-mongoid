@@ -40,7 +40,7 @@ module CarrierWave
         end
 
         def remove_#{column}!
-          super unless paranoid? && flagged_for_destroy?
+          super unless respond_to?(:paranoid?) && paranoid? && flagged_for_destroy?
         end
 
         # Overrides Mongoid's default dirty behavior to instead work more like
