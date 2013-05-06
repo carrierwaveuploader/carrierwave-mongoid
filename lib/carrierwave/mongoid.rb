@@ -35,6 +35,10 @@ module CarrierWave
       class_eval <<-RUBY, __FILE__, __LINE__+1
         def #{column}=(new_file)
           column = _mounter(:#{column}).serialization_column
+
+          # mongoid won't upload a new file if there was no file previously.
+          write_uploader(column, '_old_') if self.persisted? && read_uploader(column).nil?
+
           send(:"\#{column}_will_change!")
           super
         end
