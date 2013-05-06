@@ -568,7 +568,7 @@ describe CarrierWave::Mongoid do
         end
 
         @class.class_eval do
-          embeds_many :mongo_locations
+          embeds_many :mongo_locations, cascade_callbacks: true
         end
 
         @doc = @class.new
@@ -578,6 +578,17 @@ describe CarrierWave::Mongoid do
       end
 
       include_examples "embedded documents"
+
+      it "attaches a new file to the document which didn't have one at first" do
+        doc = @class.new
+        doc.mongo_locations.build
+        doc.save & doc.reload
+
+        doc.mongo_locations.first.image = stub_file('test.jpeg')
+        doc.save & doc.reload
+
+        doc.mongo_locations.first[:image].should == 'test.jpeg'
+      end
 
       describe 'with double embedded documents' do
 
