@@ -579,13 +579,15 @@ describe CarrierWave::Mongoid do
 
       include_examples "embedded documents"
 
-      it "attaches a new file to the document which didn't have one at first" do
+      it "attaches a new file to an existing document that had no file at first" do
         doc = @class.new
         doc.mongo_locations.build
-        doc.save & doc.reload
+        doc.save.should be_true
+        doc.reload
 
         doc.mongo_locations.first.image = stub_file('test.jpeg')
-        doc.save & doc.reload
+        doc.save.should be_true
+        doc.reload
 
         doc.mongo_locations.first[:image].should == 'test.jpeg'
       end
