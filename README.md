@@ -55,17 +55,6 @@ class AvatarUploader < CarrierWave::Uploader::Base
 end
 ```
 
-Since GridFS doesn't make the files available via HTTP, you'll need to stream
-them yourself. In Rails for example, you could use the `send_data` method. You
-can optionally tell CarrierWave the URL you will serve your images from,
-allowing it to generate the correct URL, by setting eg:
-
-```ruby
-CarrierWave.configure do |config|
-  config.grid_fs_access_url = "/systems/uploads"
-end
-```
-
 Bringing it all together, you can also configure Carrierwave to use Mongoid's
 database connection and default all storage to GridFS. That might look something
 like this:
@@ -75,6 +64,37 @@ CarrierWave.configure do |config|
   config.storage = :grid_fs
   config.root = Rails.root.join('tmp')
   config.cache_dir = "uploads"
+end
+```
+
+## Serving uploading files
+
+Since GridFS doesn't make the files available via HTTP, you'll need to stream
+them yourself. For example, in Rails, you could use the `send_data` method:
+
+```ruby
+class UsersController < ApplicationController
+  def avatar
+    content = @user.avatar.read
+    if stale?(etag: content, last_modified: @user.updated_at.utc, public: true)
+      send_data content, type: @user.avatar.file.content_type, disposition: "inline"
+      expires_in 0, public: true
+    end
+  end
+end
+
+# and in routes.rb
+resources :users do
+  get :avatar, on: :member
+end
+```
+
+You can optionally tell CarrierWave the URL you will serve your images from,
+allowing it to generate the correct URL, by setting `grid_fs_access_url`:
+
+```ruby
+CarrierWave.configure do |config|
+  config.grid_fs_access_url = "/systems/uploads"
 end
 ```
 
