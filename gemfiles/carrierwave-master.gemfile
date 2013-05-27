@@ -1,5 +1,5 @@
 source "https://rubygems.org"
 
-gem "carrierwave", github: "jnicklas/carrierwave", branch: "master"
+gem "carrierwave", github: "carrierwaveuploader/carrierwave", branch: "master"
 
 gemspec path: "../"

@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Jonas Nicklas", "Trevor Turk"]
   s.email       = ["jonas.nicklas@gmail.com"]
-  s.homepage    = "https://github.com/jnicklas/carrierwave-mongoid"
+  s.homepage    = "https://github.com/carrierwaveuploader/carrierwave-mongoid"
   s.summary     = %q{Mongoid support for CarrierWave}
   s.description = %q{Mongoid support for CarrierWave}
   s.license     = "MIT"

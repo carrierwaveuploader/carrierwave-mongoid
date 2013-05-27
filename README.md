@@ -1,7 +1,7 @@
-# CarrierWave for Mongoid [![Gem Version](https://badge.fury.io/rb/carrierwave-mongoid.png)](http://badge.fury.io/rb/carrierwave-mongoid) [![Build Status](https://travis-ci.org/jnicklas/carrierwave-mongoid.png?branch=master)](http://travis-ci.org/jnicklas/carrierwave-mongoid) [![Code Climate](https://codeclimate.com/github/jnicklas/carrierwave-mongoid.png)](https://codeclimate.com/github/jnicklas/carrierwave-mongoid)
+# CarrierWave for Mongoid [![Gem Version](https://badge.fury.io/rb/carrierwave-mongoid.png)](http://badge.fury.io/rb/carrierwave-mongoid) [![Build Status](https://travis-ci.org/carrierwaveuploader/carrierwave-mongoid.png?branch=master)](http://travis-ci.org/carrierwaveuploader/carrierwave-mongoid) [![Code Climate](https://codeclimate.com/github/carrierwaveuploader/carrierwave-mongoid.png)](https://codeclimate.com/github/carrierwaveuploader/carrierwave-mongoid)
 
 This gem adds support for Mongoid and MongoDB's GridFS to
-[CarrierWave](https://github.com/jnicklas/carrierwave/)
+[CarrierWave](https://github.com/carrierwaveuploader/carrierwave/)
 
 This functionality used to be part of CarrierWave but has since been extracted
 into this gem.
@@ -27,7 +27,7 @@ gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 ## Getting Started
 
 Follow the "Getting Started" directions in the main
-[Carrierwave repository](https://raw.github.com/jnicklas/carrierwave/).
+[Carrierwave repository](https://raw.github.com/carrierwaveuploader/carrierwave/).
 
 [Suggested] Add the field to your attr_accessor list for mass assignment
 protection:
@@ -109,12 +109,12 @@ end
 | ~> 0.2.0 | ([compare][compare-0.2], [dependencies][deps-0.2]) Rails >= 3.2, Mongoid ~> 2.0 |
 | ~> 0.1.0 | ([compare][compare-0.1], [dependencies][deps-0.1]) Rails <= 3.1                 |
 
-[compare-0.6]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.5.0...v0.6.0
-[compare-0.5]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.4.0...v0.5.0
-[compare-0.4]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.3.1...v0.4.0
-[compare-0.3]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.2.1...v0.3.1
-[compare-0.2]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.1.7...v0.2.2
-[compare-0.1]: https://github.com/jnicklas/carrierwave-mongoid/compare/v0.1.1...v0.1.7
+[compare-0.6]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.5.0...v0.6.0
+[compare-0.5]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.4.0...v0.5.0
+[compare-0.4]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.3.1...v0.4.0
+[compare-0.3]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.2.1...v0.3.1
+[compare-0.2]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.1.7...v0.2.2
+[compare-0.1]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.1.1...v0.1.7
 
 [deps-0.6]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.6.0
 [deps-0.5]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.5.0
@@ -163,4 +163,4 @@ class User
 end
 ```
 
-You can read more about this [here](https://github.com/jnicklas/carrierwave/issues#issue/81)
+You can read more about this [here](https://github.com/carrierwaveuploader/carrierwave/issues#issue/81)
