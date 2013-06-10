@@ -100,36 +100,47 @@ end
 
 ## Route configuration
 
-If you follow the instruction to this point, the uploaded images will be stored to GridFS, but since most of us would still be using
-carrierwave's api to retrieve url from the resource like so .avatar.url, it would not work since the url does not point
-to the method defined in the previous section for serving the content.
+If you follow the instruction to this point, the uploaded images will be
+stored to GridFS, and you are responsible for serving the images a public
+endpoint. If you would like to use the `#url` method on the uploaded file, you
+will need to take some additional steps.
 
-One small trick to get around this automatically is to do a simple regex matching in routes.rb.
+The `grid_fs_access_url` configuration option is the prefix for the path of
+the stored file in carrierwave.
 
-Before we begin, go to initializers/carrierwave.rb 
-to remove `config.root` if you have one, and add `config.grid_fs_access_url = '/uploads/grid'`
+Let's assume that we have a mounted `avatar` uploader on a `User` model and a
+`GridfsController`. Let's also assume that your uploader definition
+(i.e. `app/uploaders/avatar_uploader.rb`) defines `store_dir` like this:
 
-grid_fs_access_url is used to add a prefix to the url returned from carrierwave for our purpose, 
-and it's crucial to the regex method described below.
+```ruby
+def store_dir
+  "#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+end
+```
 
-Let's assume the attribute mounted is avatar and the model is user and controller is called gridfs,
-in the uploader file (e.g. avatar_uploader.rb) return 
+If `grid_fs_access_url` (in `config/initializers/carrierwave.rb`) were:
 
-`"#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"`
+```ruby
+config.grid_fs_access_url = '/uploads/grid'
+```
 
-in your store_dir method.
+You would need to define a route in your `config/routes.rb` like so:
 
-Now add those lines below in routes.rb
+```ruby
+match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#avatar'
+```
 
-`match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#avatar'`
+Now, `user.avatar.url` should return an appropriate url path to use in your
+views.
 
-Now in your view your "model.avatar.url" should show image correctly.
+### Different uploaded versions
 
-### Different versions
+If you need to include different versions (e.g. thumbnails), additional routes
+will help:
 
-If you need to include different versions like thumb, add this in your routes.rb
-
-`match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#thumb_avatar', constraints: {:filename => /thumb.*/}`
+```ruby
+match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#thumb_avatar', constraints: { filename: /thumb.*/ }
+```
 
 ## Version differences
 
