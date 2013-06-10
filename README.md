@@ -98,6 +98,39 @@ CarrierWave.configure do |config|
 end
 ```
 
+## Route configuration
+
+If you follow the instruction to this point, the uploaded images will be stored to GridFS, but since most of us would still be using
+carrierwave's api to retrieve url from the resource like so .avatar.url, it would not work since the url does not point
+to the method defined in the previous section for serving the content.
+
+One small trick to get around this automatically is to do a simple regex matching in routes.rb.
+
+Before we begin, go to initializers/carrierwave.rb 
+to remove `config.root` if you have one, and add `config.grid_fs_access_url = '/uploads/grid'`
+
+grid_fs_access_url is used to add a prefix to the url returned from carrierwave for our purpose, 
+and it's crucial to the regex method described below.
+
+Let's assume the attribute mounted is avatar and the model is user and controller is called gridfs,
+in the uploader file (e.g. avatar_uploader.rb) return 
+
+`"#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"`
+
+in your store_dir method.
+
+Now add those lines below in routes.rb
+
+`match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#avatar'`
+
+Now in your view your "model.avatar.url" should show image correctly.
+
+### Different versions
+
+If you need to include different versions like thumb, add this in your routes.rb
+
+`match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#thumb_avatar', constraints: {:filename => /thumb.*/}`
+
 ## Version differences
 
 | Version  | Notes                                                                           |
