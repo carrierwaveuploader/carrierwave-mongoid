@@ -7,7 +7,7 @@ require 'spec_helper'
 shared_examples_for "a GridFS connection" do
   describe '#store!' do
     before do
-      @uploader.stub!(:store_path).and_return('uploads/bar.txt')
+      @uploader.stub(:store_path).and_return('uploads/bar.txt')
       @grid_fs_file = @storage.store!(@file)
     end
 
@@ -49,7 +49,7 @@ shared_examples_for "a GridFS connection" do
     before do
       @grid.clear
       @grid['uploads/bar.txt'] = StringIO.new('A test, 1234')
-      @uploader.stub!(:store_path).with('bar.txt').and_return('uploads/bar.txt')
+      @uploader.stub(:store_path).with('bar.txt').and_return('uploads/bar.txt')
       @grid_fs_file = @storage.retrieve!('bar.txt')
     end
 
@@ -66,17 +66,17 @@ shared_examples_for "a GridFS connection" do
     end
 
     it "should return a relative URL path if access_url is set to the root path" do
-      @uploader.stub!(:grid_fs_access_url).and_return("/")
+      @uploader.stub(:grid_fs_access_url).and_return("/")
       @grid_fs_file.url.should == "/uploads/bar.txt"
     end
 
     it "should return a URL path if access_url is set to a file path" do
-      @uploader.stub!(:grid_fs_access_url).and_return("/image/show")
+      @uploader.stub(:grid_fs_access_url).and_return("/image/show")
       @grid_fs_file.url.should == "/image/show/uploads/bar.txt"
     end
 
     it "should return an absolute URL if access_url is set to an absolute URL" do
-      @uploader.stub!(:grid_fs_access_url).and_return("http://example.com/images/")
+      @uploader.stub(:grid_fs_access_url).and_return("http://example.com/images/")
       @grid_fs_file.url.should == "http://example.com/images/uploads/bar.txt"
     end
 
@@ -88,12 +88,12 @@ shared_examples_for "a GridFS connection" do
 
   describe '#retrieve! on a store_dir with leading slash' do
     before do
-      @uploader.stub!(:store_path).with('bar.txt').and_return('/uploads/bar.txt')
+      @uploader.stub(:store_path).with('bar.txt').and_return('/uploads/bar.txt')
       @grid_fs_file = @storage.retrieve!('bar.txt')
     end
 
     it "should return a relative URL path if access_url is set to the root path" do
-      @uploader.stub!(:grid_fs_access_url).and_return("/")
+      @uploader.stub(:grid_fs_access_url).and_return("/")
       @grid_fs_file.url.should == "/uploads/bar.txt"
     end
   end
@@ -103,13 +103,13 @@ end
 describe CarrierWave::Storage::GridFS do
 
   before do
-    @uploader = mock('an uploader')
-    @uploader.stub!(:grid_fs_access_url).and_return(nil)
+    @uploader = double('an uploader')
+    @uploader.stub(:grid_fs_access_url).and_return(nil)
   end
 
   context "when reusing an existing connection manually" do
     before do
-      @uploader.stub!(:grid_fs_connection).and_return(@database)
+      @uploader.stub(:grid_fs_connection).and_return(@database)
 
       @grid = ::Mongoid::GridFs
 

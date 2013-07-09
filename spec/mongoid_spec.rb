@@ -396,7 +396,7 @@ describe CarrierWave::Mongoid do
       end
 
       it "should not remove old file if old file had a different path but config is false" do
-        @uploader.stub!(:remove_previously_stored_files_after_update).and_return(false)
+        @uploader.stub(:remove_previously_stored_files_after_update).and_return(false)
         @doc.image = stub_file('new.jpeg')
         @doc.save.should be_true
         File.exists?(public_path('uploads/new.jpeg')).should be_true
@@ -456,7 +456,7 @@ describe CarrierWave::Mongoid do
       end
 
       it "should not remove old file if old file had a different path but config is false" do
-        @embedded_doc.image.stub!(:remove_previously_stored_files_after_update).and_return(false)
+        @embedded_doc.image.stub(:remove_previously_stored_files_after_update).and_return(false)
         @embedded_doc.image = stub_file('new.jpeg')
         @embedded_doc.save.should be_true
         File.exists?(public_path('uploads/new.jpeg')).should be_true
@@ -494,7 +494,7 @@ describe CarrierWave::Mongoid do
       end
 
       it "should not remove old file if old file had a different path but config is false" do
-        @double_embedded_doc.image.stub!(:remove_previously_stored_files_after_update).and_return(false)
+        @double_embedded_doc.image.stub(:remove_previously_stored_files_after_update).and_return(false)
         @double_embedded_doc.image = stub_file('new.jpeg')
         @double_embedded_doc.save.should be_true
         File.exists?(public_path('uploads/new.jpeg')).should be_true
