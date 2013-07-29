@@ -24,6 +24,13 @@ Or, in Rails you can add it to your Gemfile:
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 ```
 
+If you are using Rails 4.0.0 in your application, be sure to use Mongoid 4.0 and
+to explicitly depends on `mongoid-grid_fs`:
+
+```ruby
+gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
+```
+
 ## Getting Started
 
 Follow the "Getting Started" directions in the main
