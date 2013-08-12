@@ -569,6 +569,7 @@ describe CarrierWave::Mongoid do
 
         @class.class_eval do
           embeds_many :mongo_locations, cascade_callbacks: true
+          accepts_nested_attributes_for :mongo_locations
         end
 
         @doc = @class.new
@@ -590,6 +591,12 @@ describe CarrierWave::Mongoid do
         doc.reload
 
         doc.mongo_locations.first[:image].should == 'test.jpeg'
+      end
+
+      it "changes the file" do
+        @doc.update_attributes mongo_locations_attributes: { '0' => { _id: @embedded_doc._id, image: stub_file('test.jpeg') } }
+        @doc.reload
+        @doc.mongo_locations.first[:image].should == 'test.jpeg'
       end
 
       describe 'with double embedded documents' do
