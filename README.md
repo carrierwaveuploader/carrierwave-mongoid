@@ -24,8 +24,8 @@ Or, in Rails you can add it to your Gemfile:
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 ```
 
-Note: If using Rails 4, you'll need to make sure `mongoind-grid_fs` is `>= 1.9.0`.
-If in doubt, run `bundle update mongoind-grid_fs`
+Note: If using Rails 4, you'll need to make sure `mongoid-grid_fs` is `>= 1.9.0`.
+If in doubt, run `bundle update mongoid-grid_fs`
 
 ```ruby
 gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
