@@ -599,6 +599,12 @@ describe CarrierWave::Mongoid do
         @doc.mongo_locations.first[:image].should == 'test.jpeg'
       end
 
+      it "removes a file" do
+        @doc.update_attributes mongo_locations_attributes: { '0' => { _id: @embedded_doc._id, remove_image: "1" } }
+        @doc.reload
+        @doc.mongo_locations.first[:image].should_not be_present
+      end
+
       describe 'with double embedded documents' do
 
         before do
