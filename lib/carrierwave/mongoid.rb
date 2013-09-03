@@ -43,6 +43,12 @@ module CarrierWave
           super
         end
 
+        def remove_#{column}=(arg)
+          column = _mounter(:#{column}).serialization_column
+          send(:"\#{column}_will_change!")
+          super
+        end
+
         def remove_#{column}!
           super unless respond_to?(:paranoid?) && paranoid? && flagged_for_destroy?
         end
