@@ -547,7 +547,7 @@ describe CarrierWave::Mongoid do
 
         @class.class_eval do
           embeds_one :mongo_location
-          default_scope where(:always_false => false)
+          default_scope ->{ where(:always_false => false) }
         end
 
         @doc = @class.new
@@ -642,7 +642,7 @@ describe CarrierWave::Mongoid do
 
         @class.class_eval do
           embeds_many :mongo_locations
-          default_scope where(:always_false => false)
+          default_scope ->{ where(:always_false => false) }
         end
 
         @doc = @class.new
