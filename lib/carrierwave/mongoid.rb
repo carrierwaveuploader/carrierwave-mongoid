@@ -73,7 +73,12 @@ module CarrierWave
 
         def find_previous_model_for_#{column}
           if self.embedded?
-            ancestors       = [[ self.metadata.key, self._parent ]].tap { |x| x.unshift([ x.first.last.metadata.key, x.first.last._parent ]) while x.first.last.embedded? }
+            if self.respond_to? :__metadata
+              metadata_method_name = :__metadata
+            else
+              metadata_method_name = :metadata
+            end
+            ancestors       = [[ self.send(metadata_method_name).key, self._parent ]].tap { |x| x.unshift([ x.first.last.send(metadata_method_name).key, x.first.last._parent ]) while x.first.last.embedded? }
             first_parent = ancestors.first.last
             reloaded_parent = first_parent.class.unscoped.find(first_parent.to_key.first)
             association = ancestors.inject(reloaded_parent) { |parent,(key,ancestor)| (parent.is_a?(Array) ? parent.find(ancestor.to_key.first) : parent).send(key) }
