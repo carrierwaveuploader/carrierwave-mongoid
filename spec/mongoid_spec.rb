@@ -196,36 +196,16 @@ describe CarrierWave::Mongoid do
       end
 
       it "should use I18n for integrity error messages" do
-        if Gem::Dependency.new('CarrierWave', '>= 0.10.0').match?('CarrierWave', CarrierWave::VERSION)
-          change_locale_and_store_translations(:en, :mongoid => {
-            :errors => { :models => { :mongo_user => { :attributes => {
-              :image => { :carrierwave_integrity_error => 'is not of an allowed file type'
-          }}}}}}) do
-            @doc.should_not be_valid
-            @doc.errors[:image].should == ['is not of an allowed file type']
-          end
-          
-          change_locale_and_store_translations(:pt, :mongoid => {
-            :errors => { :models => { :mongo_user => { :attributes => {
-              :image => { :carrierwave_integrity_error => 'tipo de imagem não permitido.'
-          }}}}}}) do
-            @doc.should_not be_valid
-            @doc.errors[:image].should == ['tipo de imagem não permitido.']
-          end
-        else # Test for older versions of Carrierwave
+        translations = { mongoid: { errors: { messages: { carrierwave_integrity_error: 'is not of an allowed file type' }}}}
+        change_locale_and_store_translations(:en, translations) do
           @doc.valid?
           @doc.errors[:image].should == ['is not of an allowed file type']
+        end
 
-          change_locale_and_store_translations(:pt, :mongoid => {
-            :errors => {
-            :messages => {
-            :carrierwave_integrity_error => 'tipo de imagem não permitido.'
-          }
-          }
-          }) do
-            @doc.should_not be_valid
-            @doc.errors[:image].should == ['tipo de imagem não permitido.']
-          end
+        translations = { mongoid: { errors: { messages: { carrierwave_integrity_error: 'tipo de imagem não permitido.' }}}}
+        change_locale_and_store_translations(:pt, translations) do
+          @doc.valid?
+          @doc.errors[:image].should == ['tipo de imagem não permitido.']
         end
       end
     end
@@ -242,36 +222,16 @@ describe CarrierWave::Mongoid do
       end
 
       it "should use I18n for processing error messages" do
-        if Gem::Dependency.new('CarrierWave', '>= 0.10.0').match?('CarrierWave', CarrierWave::VERSION)
-          change_locale_and_store_translations(:en, :mongoid => {
-            :errors => { :models => { :mongo_user => { :attributes => {
-              :image => { :carrierwave_processing_error => 'failed to be processed'
-          }}}}}}) do
-            @doc.should_not be_valid
-            @doc.errors[:image].should == ['failed to be processed']
-          end
-          
-          change_locale_and_store_translations(:pt, :mongoid => {
-            :errors => { :models => { :mongo_user => { :attributes => {
-              :image => { :carrierwave_processing_error => 'falha ao processar imagem.'
-          }}}}}}) do
-            @doc.should_not be_valid
-            @doc.errors[:image].should == ['falha ao processar imagem.']
-          end
-        else # Test for older versions of Carrierwave
+        translations = { mongoid: { errors: { messages: { carrierwave_processing_error: 'failed to be processed' }}}}
+        change_locale_and_store_translations(:en, translations) do
           @doc.valid?
           @doc.errors[:image].should == ['failed to be processed']
+        end
 
-          change_locale_and_store_translations(:pt, :mongoid => {
-            :errors => {
-            :messages => {
-            :carrierwave_processing_error => 'falha ao processar imagem.'
-          }
-          }
-          }) do
-            @doc.should_not be_valid
-            @doc.errors[:image].should == ['falha ao processar imagem.']
-          end
+        translations = { mongoid: { errors: { messages: { carrierwave_processing_error: 'falha ao processar imagem.' }}}}
+        change_locale_and_store_translations(:pt, translations) do
+          @doc.valid?
+          @doc.errors[:image].should == ['falha ao processar imagem.']
         end
       end
     end
