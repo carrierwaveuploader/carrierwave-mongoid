@@ -36,7 +36,7 @@ gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
 ## Getting Started
 
 Follow the "Getting Started" directions in the main
-[Carrierwave repository](https://raw.github.com/carrierwaveuploader/carrierwave/).
+[Carrierwave repository](https://github.com/carrierwaveuploader/carrierwave/).
 
 [Suggested] Add the field to your attr_accessor list for mass assignment
 protection:
