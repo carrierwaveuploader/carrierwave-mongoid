@@ -44,8 +44,10 @@ module CarrierWave
         end
 
         def remove_#{column}=(arg)
-          column = _mounter(:#{column}).serialization_column
-          send(:"\#{column}_will_change!")
+          if ['1', true].include?(arg)
+            column = _mounter(:#{column}).serialization_column
+            send(:"\#{column}_will_change!")
+          end
           super
         end
 

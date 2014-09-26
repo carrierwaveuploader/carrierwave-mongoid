@@ -238,6 +238,38 @@ describe CarrierWave::Mongoid do
 
   end
 
+  describe '#remove_image=' do
+    before do
+      mongo_user_klass = reset_mongo_class
+      @doc = mongo_user_klass.new
+    end
+
+    it "treats true argument such that attribute is marked as changed" do
+      @doc.remove_image = true
+      @doc.should be_image_changed
+    end
+
+    it "treats '1' argument such that attribute is marked as changed" do
+      @doc.remove_image = '1'
+      @doc.should be_image_changed
+    end
+
+    it "treats false argument such that attribute is not marked as changed" do
+      @doc.remove_image = false
+      @doc.should_not be_image_changed
+    end
+
+    it "treats nil argument such that attribute is not marked as changed" do
+      @doc.remove_image = nil
+      @doc.should_not be_image_changed
+    end
+
+    it "treats '0' argument such that attribute is not marked as changed" do
+      @doc.remove_image = '0'
+      @doc.should_not be_image_changed
+    end
+  end
+
   describe "#save" do
 
     it "after it was initialized with params" do
@@ -790,7 +822,7 @@ describe CarrierWave::Mongoid do
     end
   end
 
-  describe '#mount_uploader removing old files with with mount_on' do
+  describe '#mount_uploader removing old files with mount_on' do
 
     before do
       @class = reset_mongo_class
