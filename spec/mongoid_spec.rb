@@ -790,7 +790,7 @@ describe CarrierWave::Mongoid do
     end
   end
 
-  describe '#mount_uploader removing old files with with mount_on' do
+  describe '#mount_uploader removing old files with mount_on' do
 
     before do
       @class = reset_mongo_class
