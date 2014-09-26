@@ -244,6 +244,16 @@ describe CarrierWave::Mongoid do
       @doc = mongo_user_klass.new
     end
 
+    it "treats true argument such that attribute is marked as changed" do
+      @doc.remove_image = true
+      @doc.should be_image_changed
+    end
+
+    it "treats '1' argument such that attribute is marked as changed" do
+      @doc.remove_image = '1'
+      @doc.should be_image_changed
+    end
+
     it "treats false argument such that attribute is not marked as changed" do
       @doc.remove_image = false
       @doc.should_not be_image_changed
