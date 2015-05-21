@@ -43,6 +43,10 @@ shared_examples_for "a GridFS connection" do
     it "should have a file length" do
       @grid_fs_file.file_length.should == 13
     end
+
+    it "should have a file md5" do
+      @grid_fs_file.md5.should == 'bf8456578232907ce3136ba776e1a40d'
+    end
   end
 
   describe '#retrieve!' do

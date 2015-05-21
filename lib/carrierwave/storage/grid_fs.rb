@@ -53,7 +53,7 @@ module CarrierWave
           grid_file.data if grid_file
         end
 
-        %w( delete content_type length ).each do |method|
+        %w( delete content_type length md5 ).each do |method|
           class_eval <<-__, __FILE__, __LINE__
             def #{ method }
               grid_file.#{ method } if grid_file
