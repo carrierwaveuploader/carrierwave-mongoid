@@ -46,13 +46,16 @@ module CarrierWave
     module I18nHelpers
       def change_locale_and_store_translations(locale, translations, &block)
         current_locale = I18n.locale
+        current_enforce = I18n.config.enforce_available_locales
         begin
+          I18n.config.enforce_available_locales = false
           I18n.backend.store_translations locale, translations
           I18n.locale = locale
           yield
         ensure
           I18n.reload!
           I18n.locale = current_locale
+          I18n.config.enforce_available_locales = current_enforce
         end
       end
     end
