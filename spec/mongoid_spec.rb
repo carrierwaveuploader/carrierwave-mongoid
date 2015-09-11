@@ -383,13 +383,13 @@ describe CarrierWave::Mongoid do
 
       it "deletes the instance of MongoUser after save" do
         @doc.save
-        MongoUser.count.should eql(1)
+        MongoUser.count.should eq(1)
         @doc.destroy
       end
 
       it "deletes the instance of MongoUser after save and then re-looking up the instance" do
         @doc.save
-        MongoUser.count.should eql(1)
+        MongoUser.count.should eq(1)
         @doc = MongoUser.first
         @doc.destroy
       end
