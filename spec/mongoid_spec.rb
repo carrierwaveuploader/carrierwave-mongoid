@@ -274,7 +274,7 @@ describe CarrierWave::Mongoid do
 
     it "after it was initialized with params" do
       doc = reset_mongo_class.new(:image => stub_file('test.jpg'))
-      doc.save.should be_true
+      doc.save.should be_truthy
       doc.image.should be_an_instance_of(MongoUploader)
       doc.image.current_path.should == public_path('uploads/test.jpg')
     end
@@ -287,7 +287,7 @@ describe CarrierWave::Mongoid do
     context "when no file is assigned" do
 
       it "image is blank" do
-        @doc.save.should be_true
+        @doc.save.should be_truthy
         @doc.image.should be_blank
       end
 
@@ -297,14 +297,14 @@ describe CarrierWave::Mongoid do
 
       it "copies the file to the upload directory" do
         @doc.image = stub_file('test.jpg')
-        @doc.save.should be_true
+        @doc.save.should be_truthy
         @doc.image.should be_an_instance_of(MongoUploader)
         @doc.image.current_path.should == public_path('uploads/test.jpg')
       end
 
       it "saves the filename in the database" do
         @doc.image = stub_file('test.jpg')
-        @doc.save.should be_true
+        @doc.save.should be_truthy
         @doc[:image].should == 'test.jpg'
         @doc.image_identifier.should == 'test.jpg'
       end
@@ -315,7 +315,7 @@ describe CarrierWave::Mongoid do
           @doc.image = stub_file('test.jpeg')
           @doc.save
           @doc.remove_image = true
-          @doc.save.should be_true
+          @doc.save.should be_truthy
           @doc.reload
           @doc.image.should be_blank
           @doc.image_identifier.should be_blank
@@ -324,14 +324,14 @@ describe CarrierWave::Mongoid do
       end
 
       it "should mark image as changed when saving a new image" do
-        @doc.image_changed?.should be_false
+        @doc.image_changed?.should be_falsey
         @doc.image = stub_file("test.jpeg")
-        @doc.image_changed?.should be_true
+        @doc.image_changed?.should be_truthy
         @doc.save
         @doc.reload
-        @doc.image_changed?.should be_false
+        @doc.image_changed?.should be_falsey
         @doc.image = stub_file("test.jpg")
-        @doc.image_changed?.should be_true
+        @doc.image_changed?.should be_truthy
       end
 
     end
@@ -369,12 +369,12 @@ describe CarrierWave::Mongoid do
 
       it "removes the file from the filesystem" do
         @doc.image = stub_file('test.jpeg')
-        @doc.save.should be_true
-        File.exist?(public_path('uploads/test.jpeg')).should be_true
+        @doc.save.should be_truthy
+        File.exist?(public_path('uploads/test.jpeg')).should be_truthy
         @doc.image.should be_an_instance_of(MongoUploader)
         @doc.image.current_path.should == public_path('uploads/test.jpeg')
         @doc.destroy
-        File.exist?(public_path('uploads/test.jpeg')).should be_false
+        File.exist?(public_path('uploads/test.jpeg')).should be_falsey
       end
 
     end
@@ -406,8 +406,8 @@ describe CarrierWave::Mongoid do
       @class.field :foo
       @doc = @class.new
       @doc.image = stub_file('old.jpeg')
-      @doc.save.should be_true
-      File.exists?(public_path('uploads/old.jpeg')).should be_true
+      @doc.save.should be_truthy
+      File.exists?(public_path('uploads/old.jpeg')).should be_truthy
     end
 
     after do
@@ -418,30 +418,30 @@ describe CarrierWave::Mongoid do
 
       it "should remove old file if old file had a different path" do
         @doc.image = stub_file('new.jpeg')
-        @doc.save.should be_true
-        File.exists?(public_path('uploads/new.jpeg')).should be_true
-        File.exists?(public_path('uploads/old.jpeg')).should be_false
+        @doc.save.should be_truthy
+        File.exists?(public_path('uploads/new.jpeg')).should be_truthy
+        File.exists?(public_path('uploads/old.jpeg')).should be_falsey
       end
 
       it "should not remove old file if old file had a different path but config is false" do
         @uploader.stub(:remove_previously_stored_files_after_update).and_return(false)
         @doc.image = stub_file('new.jpeg')
-        @doc.save.should be_true
-        File.exists?(public_path('uploads/new.jpeg')).should be_true
-        File.exists?(public_path('uploads/old.jpeg')).should be_true
+        @doc.save.should be_truthy
+        File.exists?(public_path('uploads/new.jpeg')).should be_truthy
+        File.exists?(public_path('uploads/old.jpeg')).should be_truthy
       end
 
       it "should not remove file if old file had the same path" do
         @doc.image = stub_file('old.jpeg')
-        @doc.save.should be_true
-        File.exists?(public_path('uploads/old.jpeg')).should be_true
+        @doc.save.should be_truthy
+        File.exists?(public_path('uploads/old.jpeg')).should be_truthy
       end
 
       it "should not remove file if validations fail on save" do
         @class.validate { |r| r.errors.add :textfile, "FAIL!" }
         @doc.image = stub_file('new.jpeg')
-        @doc.save.should be_false
-        File.exists?(public_path('uploads/old.jpeg')).should be_true
+        @doc.save.should be_falsey
+        File.exists?(public_path('uploads/old.jpeg')).should be_truthy
       end
     end
 
@@ -455,60 +455,60 @@ describe CarrierWave::Mongoid do
 
         @doc.image = stub_file('old.jpeg')
         @doc.foo = "test"
-        @doc.save.should be_true
-        File.exists?(public_path('uploads/test.jpeg')).should be_true
+        @doc.save.should be_truthy
+        File.exists?(public_path('uploads/test.jpeg')).should be_truthy
         @doc.image.read.should == "this is stuff"
       end
 
       it "should not remove file if old file had the same dynamic path" do
         @doc.image = stub_file('test.jpeg')
-        @doc.save.should be_true
-        File.exists?(public_path('uploads/test.jpeg')).should be_true
+        @doc.save.should be_truthy
+        File.exists?(public_path('uploads/test.jpeg')).should be_truthy
       end
 
       it "should remove old file if old file had a different dynamic path" do
         @doc.foo = "new"
         @doc.image = stub_file('test.jpeg')
-        @doc.save.should be_true
-        File.exists?(public_path('uploads/new.jpeg')).should be_true
-        File.exists?(public_path('uploads/test.jpeg')).should be_false
+        @doc.save.should be_truthy
+        File.exists?(public_path('uploads/new.jpeg')).should be_truthy
+        File.exists?(public_path('uploads/test.jpeg')).should be_falsey
       end
     end
 
     shared_examples "embedded documents" do
       it "should remove old file if old file had a different path" do
         @embedded_doc.image = stub_file('new.jpeg')
-        @embedded_doc.save.should be_true
-        File.exists?(public_path('uploads/new.jpeg')).should be_true
-        File.exists?(public_path('uploads/old.jpeg')).should be_false
+        @embedded_doc.save.should be_truthy
+        File.exists?(public_path('uploads/new.jpeg')).should be_truthy
+        File.exists?(public_path('uploads/old.jpeg')).should be_falsey
       end
 
       it "should not remove old file if old file had a different path but config is false" do
         @embedded_doc.image.stub(:remove_previously_stored_files_after_update).and_return(false)
         @embedded_doc.image = stub_file('new.jpeg')
-        @embedded_doc.save.should be_true
-        File.exists?(public_path('uploads/new.jpeg')).should be_true
-        File.exists?(public_path('uploads/old.jpeg')).should be_true
+        @embedded_doc.save.should be_truthy
+        File.exists?(public_path('uploads/new.jpeg')).should be_truthy
+        File.exists?(public_path('uploads/old.jpeg')).should be_truthy
       end
 
       it "should not remove file if old file had the same path" do
         @embedded_doc.image = stub_file('old.jpeg')
-        @embedded_doc.save.should be_true
-        File.exists?(public_path('uploads/old.jpeg')).should be_true
+        @embedded_doc.save.should be_truthy
+        File.exists?(public_path('uploads/old.jpeg')).should be_truthy
       end
 
       it "should not remove file if validations fail on save" do
         @embedded_doc_class.validate { |r| r.errors.add :textfile, "FAIL!" }
         @embedded_doc.image = stub_file('new.jpeg')
-        @embedded_doc.save.should be_false
-        File.exists?(public_path('uploads/old.jpeg')).should be_true
+        @embedded_doc.save.should be_falsey
+        File.exists?(public_path('uploads/old.jpeg')).should be_truthy
       end
 
       it "should not touch parent's dirty attributes" do
         @class.field :title
         @doc.title = "Title"
         @embedded_doc.image = stub_file('new.jpeg')
-        @embedded_doc.save.should be_true
+        @embedded_doc.save.should be_truthy
         @doc.title.should == "Title"
       end
     end
@@ -516,30 +516,30 @@ describe CarrierWave::Mongoid do
     shared_examples "double embedded documents" do
       it "should remove old file if old file had a different path" do
         @double_embedded_doc.image = stub_file('new.jpeg')
-        @double_embedded_doc.save.should be_true
-        File.exists?(public_path('uploads/new.jpeg')).should be_true
-        File.exists?(public_path('uploads/old.jpeg')).should be_false
+        @double_embedded_doc.save.should be_truthy
+        File.exists?(public_path('uploads/new.jpeg')).should be_truthy
+        File.exists?(public_path('uploads/old.jpeg')).should be_falsey
       end
 
       it "should not remove old file if old file had a different path but config is false" do
         @double_embedded_doc.image.stub(:remove_previously_stored_files_after_update).and_return(false)
         @double_embedded_doc.image = stub_file('new.jpeg')
-        @double_embedded_doc.save.should be_true
-        File.exists?(public_path('uploads/new.jpeg')).should be_true
-        File.exists?(public_path('uploads/old.jpeg')).should be_true
+        @double_embedded_doc.save.should be_truthy
+        File.exists?(public_path('uploads/new.jpeg')).should be_truthy
+        File.exists?(public_path('uploads/old.jpeg')).should be_truthy
       end
 
       it "should not remove file if old file had the same path" do
         @double_embedded_doc.image = stub_file('old.jpeg')
-        @double_embedded_doc.save.should be_true
-        File.exists?(public_path('uploads/old.jpeg')).should be_true
+        @double_embedded_doc.save.should be_truthy
+        File.exists?(public_path('uploads/old.jpeg')).should be_truthy
       end
 
       it "should not remove file if validations fail on save" do
         @double_embedded_doc_class.validate { |r| r.errors.add :textfile, "FAIL!" }
         @double_embedded_doc.image = stub_file('new.jpeg')
-        @double_embedded_doc.save.should be_false
-        File.exists?(public_path('uploads/old.jpeg')).should be_true
+        @double_embedded_doc.save.should be_falsey
+        File.exists?(public_path('uploads/old.jpeg')).should be_truthy
       end
 
     end
@@ -559,7 +559,7 @@ describe CarrierWave::Mongoid do
         @doc = @class.new
         @embedded_doc = @doc.build_mongo_location
         @embedded_doc.image = stub_file('old.jpeg')
-        @embedded_doc.save.should be_true
+        @embedded_doc.save.should be_truthy
       end
 
       include_examples "embedded documents"
@@ -581,7 +581,7 @@ describe CarrierWave::Mongoid do
         @doc = @class.new
         @embedded_doc = @doc.build_mongo_location
         @embedded_doc.image = stub_file('old.jpeg')
-        @embedded_doc.save.should be_true
+        @embedded_doc.save.should be_truthy
       end
 
       include_examples "embedded documents"
@@ -603,7 +603,7 @@ describe CarrierWave::Mongoid do
         @doc = @class.new
         @embedded_doc = @doc.mongo_locations.build
         @embedded_doc.image = stub_file('old.jpeg')
-        @embedded_doc.save.should be_true
+        @embedded_doc.save.should be_truthy
       end
 
       include_examples "embedded documents"
@@ -611,11 +611,11 @@ describe CarrierWave::Mongoid do
       it "attaches a new file to an existing document that had no file at first" do
         doc = @class.new
         doc.mongo_locations.build
-        doc.save.should be_true
+        doc.save.should be_truthy
         doc.reload
 
         doc.mongo_locations.first.image = stub_file('test.jpeg')
-        doc.save.should be_true
+        doc.save.should be_truthy
         doc.reload
 
         doc.mongo_locations.first[:image].should == 'test.jpeg'
@@ -649,11 +649,11 @@ describe CarrierWave::Mongoid do
           @doc = @class.new
           @embedded_doc = @doc.mongo_locations.build
           @embedded_doc.image = stub_file('old.jpeg')
-          @embedded_doc.save.should be_true
+          @embedded_doc.save.should be_truthy
 
           @double_embedded_doc = @embedded_doc.mongo_items.build
           @double_embedded_doc.image = stub_file('old.jpeg')
-          @double_embedded_doc.save.should be_true
+          @double_embedded_doc.save.should be_truthy
         end
 
         include_examples "double embedded documents"
@@ -676,7 +676,7 @@ describe CarrierWave::Mongoid do
         @doc = @class.new
         @embedded_doc = @doc.mongo_locations.build
         @embedded_doc.image = stub_file('old.jpeg')
-        @embedded_doc.save.should be_true
+        @embedded_doc.save.should be_truthy
       end
 
       include_examples "embedded documents"
@@ -697,11 +697,11 @@ describe CarrierWave::Mongoid do
           @doc = @class.new
           @embedded_doc = @doc.mongo_locations.build
           @embedded_doc.image = stub_file('old.jpeg')
-          @embedded_doc.save.should be_true
+          @embedded_doc.save.should be_truthy
 
           @double_embedded_doc = @embedded_doc.mongo_items.build
           @double_embedded_doc.image = stub_file('old.jpeg')
-          @double_embedded_doc.save.should be_true
+          @double_embedded_doc.save.should be_truthy
         end
 
         include_examples "double embedded documents"
@@ -722,7 +722,7 @@ describe CarrierWave::Mongoid do
         end
 
         @doc = @class.new(mongo_locations_attributes: [{image: stub_file("old.jpeg")}])
-        @doc.save.should be_true
+        @doc.save.should be_truthy
         @embedded_doc = @doc.mongo_locations.first
       end
 
@@ -733,7 +733,7 @@ describe CarrierWave::Mongoid do
       end
 
       it "should update the image on update_attributes" do
-        @doc.update_attributes(mongo_locations_attributes: [{id: @embedded_doc.id, image: stub_file("new.jpeg")}]).should be_true
+        @doc.update_attributes(mongo_locations_attributes: [{id: @embedded_doc.id, image: stub_file("new.jpeg")}]).should be_truthy
         @doc.reload
         @doc.mongo_locations.first.image.path.should match(/new\.jpeg$/)
         @embedded_doc.image.path.should match(/new\.jpeg$/)
@@ -749,9 +749,9 @@ describe CarrierWave::Mongoid do
       @class = reset_mongo_class(@uploader)
       @doc = @class.new
       @doc.image = stub_file('old.jpeg')
-      @doc.save.should be_true
-      File.exists?(public_path('uploads/old.jpeg')).should be_true
-      File.exists?(public_path('uploads/thumb_old.jpeg')).should be_true
+      @doc.save.should be_truthy
+      File.exists?(public_path('uploads/old.jpeg')).should be_truthy
+      File.exists?(public_path('uploads/thumb_old.jpeg')).should be_truthy
     end
 
     after do
@@ -760,18 +760,18 @@ describe CarrierWave::Mongoid do
 
     it "should remove old file if old file had a different path" do
       @doc.image = stub_file('new.jpeg')
-      @doc.save.should be_true
-      File.exists?(public_path('uploads/new.jpeg')).should be_true
-      File.exists?(public_path('uploads/thumb_new.jpeg')).should be_true
-      File.exists?(public_path('uploads/old.jpeg')).should be_false
-      File.exists?(public_path('uploads/thumb_old.jpeg')).should be_false
+      @doc.save.should be_truthy
+      File.exists?(public_path('uploads/new.jpeg')).should be_truthy
+      File.exists?(public_path('uploads/thumb_new.jpeg')).should be_truthy
+      File.exists?(public_path('uploads/old.jpeg')).should be_falsey
+      File.exists?(public_path('uploads/thumb_old.jpeg')).should be_falsey
     end
 
     it "should not remove file if old file had the same path" do
       @doc.image = stub_file('old.jpeg')
-      @doc.save.should be_true
-      File.exists?(public_path('uploads/old.jpeg')).should be_true
-      File.exists?(public_path('uploads/thumb_old.jpeg')).should be_true
+      @doc.save.should be_truthy
+      File.exists?(public_path('uploads/old.jpeg')).should be_truthy
+      File.exists?(public_path('uploads/thumb_old.jpeg')).should be_truthy
     end
   end
 
@@ -785,9 +785,9 @@ describe CarrierWave::Mongoid do
       @doc = @class.new
       @doc.image = stub_file('old.jpeg')
       @doc.textfile = stub_file('old.txt')
-      @doc.save.should be_true
-      File.exists?(public_path('uploads/old.jpeg')).should be_true
-      File.exists?(public_path('uploads/old.txt')).should be_true
+      @doc.save.should be_truthy
+      File.exists?(public_path('uploads/old.jpeg')).should be_truthy
+      File.exists?(public_path('uploads/old.txt')).should be_truthy
     end
 
     after do
@@ -797,28 +797,28 @@ describe CarrierWave::Mongoid do
     it "should remove old file1 and file2 if old file1 and file2 had a different paths" do
       @doc.image = stub_file('new.jpeg')
       @doc.textfile = stub_file('new.txt')
-      @doc.save.should be_true
-      File.exists?(public_path('uploads/new.jpeg')).should be_true
-      File.exists?(public_path('uploads/old.jpeg')).should be_false
-      File.exists?(public_path('uploads/new.txt')).should be_true
-      File.exists?(public_path('uploads/old.txt')).should be_false
+      @doc.save.should be_truthy
+      File.exists?(public_path('uploads/new.jpeg')).should be_truthy
+      File.exists?(public_path('uploads/old.jpeg')).should be_falsey
+      File.exists?(public_path('uploads/new.txt')).should be_truthy
+      File.exists?(public_path('uploads/old.txt')).should be_falsey
     end
 
     it "should remove old file1 but not file2 if old file1 had a different path but old file2 has the same path" do
       @doc.image = stub_file('new.jpeg')
       @doc.textfile = stub_file('old.txt')
-      @doc.save.should be_true
-      File.exists?(public_path('uploads/new.jpeg')).should be_true
-      File.exists?(public_path('uploads/old.jpeg')).should be_false
-      File.exists?(public_path('uploads/old.txt')).should be_true
+      @doc.save.should be_truthy
+      File.exists?(public_path('uploads/new.jpeg')).should be_truthy
+      File.exists?(public_path('uploads/old.jpeg')).should be_falsey
+      File.exists?(public_path('uploads/old.txt')).should be_truthy
     end
 
     it "should not remove file1 or file2 if file1 and file2 have the same paths" do
       @doc.image = stub_file('old.jpeg')
       @doc.textfile = stub_file('old.txt')
-      @doc.save.should be_true
-      File.exists?(public_path('uploads/old.jpeg')).should be_true
-      File.exists?(public_path('uploads/old.txt')).should be_true
+      @doc.save.should be_truthy
+      File.exists?(public_path('uploads/old.jpeg')).should be_truthy
+      File.exists?(public_path('uploads/old.txt')).should be_truthy
     end
   end
 
@@ -830,8 +830,8 @@ describe CarrierWave::Mongoid do
       @class.mount_uploader(:avatar, @uploader1, :mount_on => :another_image)
       @doc = @class.new
       @doc.avatar = stub_file('old.jpeg')
-      @doc.save.should be_true
-      File.exists?(public_path('uploads/old.jpeg')).should be_true
+      @doc.save.should be_truthy
+      File.exists?(public_path('uploads/old.jpeg')).should be_truthy
     end
 
     after do
@@ -840,15 +840,15 @@ describe CarrierWave::Mongoid do
 
     it "should remove old file if old file had a different path" do
       @doc.avatar = stub_file('new.jpeg')
-      @doc.save.should be_true
-      File.exists?(public_path('uploads/new.jpeg')).should be_true
-      File.exists?(public_path('uploads/old.jpeg')).should be_false
+      @doc.save.should be_truthy
+      File.exists?(public_path('uploads/new.jpeg')).should be_truthy
+      File.exists?(public_path('uploads/old.jpeg')).should be_falsey
     end
 
     it "should not remove file if old file had the same path" do
       @doc.avatar = stub_file('old.jpeg')
-      @doc.save.should be_true
-      File.exists?(public_path('uploads/old.jpeg')).should be_true
+      @doc.save.should be_truthy
+      File.exists?(public_path('uploads/old.jpeg')).should be_truthy
     end
   end
 
@@ -864,21 +864,21 @@ describe CarrierWave::Mongoid do
         end
 
         @doc = @class.new(image: stub_file("old.jpeg"))
-        @doc.save.should be_true
+        @doc.save.should be_truthy
       end
 
       it "should not remove underlying image after #destroy" do
-        @doc.destroy.should be_true
+        @doc.destroy.should be_truthy
         @class.count.should eql(0)
         @class.deleted.count.should eql(1)
-        File.exist?(public_path('uploads/old.jpeg')).should be_true
+        File.exist?(public_path('uploads/old.jpeg')).should be_truthy
       end
 
       it "should remove underlying image after #destroy!" do
-        @doc.destroy!.should be_true
+        @doc.destroy!.should be_truthy
         @class.count.should eql(0)
         @class.deleted.count.should eql(0)
-        File.exist?(public_path('uploads/old.jpeg')).should be_false
+        File.exist?(public_path('uploads/old.jpeg')).should be_falsey
       end
     end
   end
