@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "carrierwave", [">= 0.8.0", "< 0.11.0"]
-  s.add_dependency "mongoid", [">= 3.0", "< 5.0"]
+  s.add_dependency "mongoid", [">= 3.0", "<= 6.0"]
   s.add_dependency "mongoid-grid_fs", [">= 1.3", "< 3.0"]
   s.add_development_dependency "rspec", ["~> 2.14"]
   s.add_development_dependency "rake", ["~> 10.0"]

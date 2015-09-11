@@ -44,6 +44,8 @@ module CarrierWave
     end
 
     module I18nHelpers
+      I18n.enforce_available_locales = false if I18n.respond_to? :enforce_available_locales=
+
       def change_locale_and_store_translations(locale, translations, &block)
         current_locale = I18n.locale
         current_enforce = I18n.config.enforce_available_locales
