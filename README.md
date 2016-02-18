@@ -1,12 +1,15 @@
 # CarrierWave for Mongoid
 
+[![Gem Version](http://img.shields.io/gem/v/carrierwave-mongoid.svg)](https://rubygems.org/gems/carrierwave-mongoid)
+[![Build Status](https://travis-ci.org/carrierwaveuploader/carrierwave-mongoid.svg)](http://travis-ci.org/carrierwaveuploader/carrierwave-mongoid)
+[![Code Climate](http://img.shields.io/codeclimate/github/carrierwaveuploader/carrierwave-mongoid.svg)](https://codeclimate.com/github/carrierwaveuploader/carrierwave-mongoid)
+[![Gem Downloads](https://img.shields.io/gem/dt/carrierwave-mongoid.svg)](https://rubygems.org/gems/carrierwave-mongoid)
+
 This gem adds support for Mongoid and MongoDB's GridFS to
 [CarrierWave](https://github.com/carrierwaveuploader/carrierwave/)
 
 This functionality used to be part of CarrierWave but has since been extracted
 into this gem.
-
-[![Gem Version](http://img.shields.io/gem/v/carrierwave-mongoid.svg)](https://rubygems.org/gems/carrierwave-mongoid) [![Build Status](https://travis-ci.org/carrierwaveuploader/carrierwave-mongoid.svg)](http://travis-ci.org/carrierwaveuploader/carrierwave-mongoid) [![Code Climate](http://img.shields.io/codeclimate/github/carrierwaveuploader/carrierwave-mongoid.svg)](https://codeclimate.com/github/carrierwaveuploader/carrierwave-mongoid)
 
 ## Installation
 
