@@ -29,8 +29,17 @@ module CarrierWave
       after_save :"store_#{column}!"
       before_save :"write_#{column}_identifier"
       after_destroy :"remove_#{column}!"
-      before_update :"store_previous_model_for_#{column}"
-      after_save :"remove_previously_stored_#{column}"
+      after_update :"mark_remove_#{column}_false"
+
+      after_update :"store_previous_changes_for_#{column}"
+
+      ### Skroutz patches
+      after_save :"invalidate_memoized_filename_for_#{column}"
+      after_save :"remove_original_filename_for_#{column}"
+      ###
+
+      after_update :"find_previous_model_for_#{column}"
+      after_update :"remove_previously_stored_#{column}"
 
       class_eval <<-RUBY, __FILE__, __LINE__+1
         def #{column}=(new_file)
@@ -101,6 +110,14 @@ module CarrierWave
             end
           end
           super(options).merge(hash)
+        end
+
+        def invalidate_memoized_filename_for_#{column}
+          send(:instance_variable_set, :"@#{column}_regularized_filename", nil)
+        end
+
+        def remove_original_filename_for_#{column}
+          _mounter(:#{column}).uploaders.each { |u| u.send(:original_filename=, nil) }
         end
       RUBY
     end
