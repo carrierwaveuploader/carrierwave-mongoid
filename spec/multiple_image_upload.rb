@@ -1,6 +1,5 @@
 # encoding: utf-8
 require 'spec_helper'
-require 'byebug'
 require 'carrierwave/mongoid'
 
 def reset_mongo_class(uploader = MongoUploader)
