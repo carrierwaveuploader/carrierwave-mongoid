@@ -4,7 +4,6 @@ require 'mongoid'
 require 'mongoid-grid_fs'
 require 'carrierwave'
 require 'carrierwave/validations/active_model'
-require 'byebug'
 
 module CarrierWave
   module Mongoid
