@@ -11,6 +11,10 @@ Mongoid.configure do |config|
   config.connect_to('carrierwave_test')
 end
 
+if defined? Mongo
+  Mongo::Logger.level = ::Logger::INFO
+end
+
 def file_path( *paths )
   File.expand_path(File.join(File.dirname(__FILE__), 'fixtures', *paths))
 end
