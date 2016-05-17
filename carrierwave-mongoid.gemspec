@@ -23,8 +23,8 @@ Gem::Specification.new do |s|
   s.add_dependency "carrierwave", [">= 0.8.0", "< 0.12.0"]
   s.add_dependency "mongoid", [">= 3.0", "< 6.0"]
   s.add_dependency "mongoid-grid_fs", [">= 1.3", "< 3.0"]
-  s.add_development_dependency "rspec", ["~> 2.14"]
-  s.add_development_dependency "rake", ["~> 10.0"]
+  s.add_development_dependency "rspec", "~>3.4.0"
+  s.add_development_dependency "rake", "~>11.1.2"
   s.add_development_dependency "mini_magick"
   s.add_development_dependency "pry"
 end
