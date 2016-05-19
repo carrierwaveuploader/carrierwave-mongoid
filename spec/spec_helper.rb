@@ -11,6 +11,10 @@ Mongoid.configure do |config|
   config.connect_to('carrierwave_test')
 end
 
+if defined? Mongo
+  Mongo::Logger.level = ::Logger::INFO
+end
+
 def file_path( *paths )
   File.expand_path(File.join(File.dirname(__FILE__), 'fixtures', *paths))
 end
@@ -25,8 +29,7 @@ module CarrierWave
   module Test
     module MockFiles
       def stub_file(filename, mime_type=nil, fake_name=nil)
-        f = File.open(file_path(filename))
-        return f
+        File.open(file_path(filename))
       end
 
       def stub_tempfile(filename, mime_type=nil, fake_name=nil)
@@ -35,9 +38,9 @@ module CarrierWave
         t = Tempfile.new(filename)
         FileUtils.copy_file(file_path(filename), t.path)
 
-        t.stub(:local_path => "",
-               :original_filename => filename || fake_name,
-               :content_type => mime_type)
+        allow(t).to receive(:local_path).and_return("")
+        allow(t).to receive(:original_filename).and_return(filename || fake_name)
+        allow(t).to receive(:content_type).and_return(mime_type)
 
         return t
       end
@@ -76,4 +79,5 @@ end
 RSpec.configure do |config|
   config.include CarrierWave::Test::MockFiles
   config.include CarrierWave::Test::I18nHelpers
+  config.color = true
 end
