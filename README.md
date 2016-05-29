@@ -158,6 +158,8 @@ match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#thumb_avatar', constr
 
 | Version  | Notes                                                                           |
 |----------|---------------------------------------------------------------------------------|
+| ~> 0.9.0 | ([compare][compare-0.9], [dependencies][deps-0.9]) Carrierwave 0.11 support     |
+| ~> 0.8.0 | ([compare][compare-0.8], [dependencies][deps-0.8]) Mongoid 5 support, bug fixes |
 | ~> 0.7.0 | ([compare][compare-0.7], [dependencies][deps-0.7]) Mongoid 3 & 4, bug fixes     |
 | ~> 0.6.0 | ([compare][compare-0.6], [dependencies][deps-0.6]) Mongoid 3 & 4, bug fixes     |
 | ~> 0.5.0 | ([compare][compare-0.5], [dependencies][deps-0.5]) Mongoid::Paranoia support    |
@@ -166,6 +168,8 @@ match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#thumb_avatar', constr
 | ~> 0.2.0 | ([compare][compare-0.2], [dependencies][deps-0.2]) Rails >= 3.2, Mongoid ~> 2.0 |
 | ~> 0.1.0 | ([compare][compare-0.1], [dependencies][deps-0.1]) Rails <= 3.1                 |
 
+[compare-0.9]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.8.1...v0.9.0
+[compare-0.8]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.7.1...v0.8.1
 [compare-0.7]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.6.3...v0.7.1
 [compare-0.6]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.5.0...v0.6.3
 [compare-0.5]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.4.0...v0.5.0
@@ -174,6 +178,8 @@ match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#thumb_avatar', constr
 [compare-0.2]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.1.7...v0.2.2
 [compare-0.1]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.1.1...v0.1.7
 
+[deps-0.9]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.9.0
+[deps-0.8]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.8.1
 [deps-0.7]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.7.1
 [deps-0.6]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.6.3
 [deps-0.5]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.5.0
