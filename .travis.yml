@@ -25,3 +25,8 @@ matrix:
   allow_failures:
     - gemfile: gemfiles/carrierwave-master.gemfile
   fast_finish: true
+  include:
+    - rvm: 2.2.5
+      gemfile: gemfiles/mongoid-6.0.gemfile
+    - rvm: 2.3.1
+      gemfile: gemfiles/mongoid-6.0.gemfile
