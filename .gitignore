@@ -1,6 +1,7 @@
 pkg/*
 *.gem
 *.sw*
+.idea
 .bundle
 spec/public
 .rvmrc
