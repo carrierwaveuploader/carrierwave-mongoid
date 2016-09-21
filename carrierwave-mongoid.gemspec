@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "carrierwave", [">= 0.8.0", "< 0.12.0"]
+  s.add_dependency "carrierwave", [">= 0.8.0", "< 2.0"]
   s.add_dependency "mongoid", [">= 3.0", "< 7.0"]
   s.add_dependency "mongoid-grid_fs", [">= 1.3", "< 3.0"]
   s.add_dependency "mime-types", "< 3" if RUBY_VERSION < "2.0" # mime-types 3+ doesn't support ruby 1.9
