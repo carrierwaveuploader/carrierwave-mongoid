@@ -117,7 +117,7 @@ describe CarrierWave::Mongoid do
         @doc.save!
         @doc.reload
 
-        expect(JSON.parse({:data => @doc.image}.to_json)).to eq("data"=>{"image"=>{"url"=>"/uploads/test.jpeg"}})
+        expect(JSON.parse({:data => @doc.image}.to_json)).to eq("data"=>{"url"=>"/uploads/test.jpeg"})
       end
 
       it "should respect options[:only] when passed to to_json for the serializable hash" do
@@ -409,7 +409,7 @@ describe CarrierWave::Mongoid do
     end
 
     after do
-      FileUtils.rm_rf(file_path("uploads"))
+      FileUtils.rm_rf(public_path("uploads"))
     end
 
     describe 'normally' do
@@ -884,7 +884,7 @@ describe CarrierWave::Mongoid do
   context "JSON serialization with multiple uploaders" do
     before do
       @class = reset_mongo_class
-      @class.send(:mount_uploader, :textfile,AnotherMongoUploader)
+      @class.send(:mount_uploader, :textfile, AnotherMongoUploader)
       @event = @class.new
       @event.image = stub_file('old.jpeg')
       @event.textfile = stub_file('old.txt')
