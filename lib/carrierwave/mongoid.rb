@@ -29,7 +29,7 @@ module CarrierWave
       after_save :"store_#{column}!"
       before_save :"write_#{column}_identifier"
       after_destroy :"remove_#{column}!"
-      before_update :"store_previous_model_for_#{column}"
+      before_update :"store_previous_changes_for_#{column}"
       after_save :"remove_previously_stored_#{column}"
 
       class_eval <<-RUBY, __FILE__, __LINE__+1
@@ -97,7 +97,7 @@ module CarrierWave
 
           self.class.uploaders.each do |column, uploader|
             if (!only && !except) || (only && only.include?(column.to_s)) || (except && !except.include?(column.to_s))
-              hash[column.to_s] = _mounter(column.to_sym).uploader.serializable_hash
+              hash[column.to_s] = _mounter(column.to_sym).uploaders[0].serializable_hash
             end
           end
           super(options).merge(hash)
