@@ -29,12 +29,19 @@ module CarrierWave
       after_save :"store_#{column}!"
       before_save :"write_#{column}_identifier"
       after_destroy :"remove_#{column}!"
-      before_update :"store_previous_model_for_#{column}"
+      before_update :"store_previous_changes_for_#{column}"
       after_save :"remove_previously_stored_#{column}"
 
       class_eval <<-RUBY, __FILE__, __LINE__+1
         def #{column}=(new_file)
           column = _mounter(:#{column}).serialization_column
+
+          # We're using _new_ and _old_ placeholder values to force Mongoid to
+          # recognize changes in embedded documents. Before we assign these
+          # values, we need to store the original file name in case we need to
+          # delete it when document is saved.
+          previous_uploader_value = read_uploader(column)
+          @_previous_uploader_value_for_#{column} = previous_uploader_value
 
           # mongoid won't upload a new file if there was no file previously.
           write_uploader(column, '_old_') if self.persisted? && read_uploader(column).nil?
@@ -73,6 +80,19 @@ module CarrierWave
           changed_attributes["#{column}"] = '_new_'
         end
 
+        # Since we had to use tricks with _old_ and _new_ values to properly
+        # track changes in embedded documents, we need to overwrite this method
+        # to remove the original file if it was replaced with a new one that
+        # had a different name.
+        def remove_previously_stored_#{column}
+          before, after = @_previous_changes_for_#{column}
+          # Don't delete if the files had the same name
+          return if before.nil? && after.nil?
+          # Proceed to remove the file, use the original name instead of '_new_'
+          before = @_previous_uploader_value_for_#{column} || before
+          _mounter(:#{column}).remove_previous([before], [after])
+        end
+
         def find_previous_model_for_#{column}
           if self.embedded?
             if self.respond_to?(:__metadata) # Mongoid >= 4.0.0.beta1
@@ -97,7 +117,8 @@ module CarrierWave
 
           self.class.uploaders.each do |column, uploader|
             if (!only && !except) || (only && only.include?(column.to_s)) || (except && !except.include?(column.to_s))
-              hash[column.to_s] = _mounter(column.to_sym).uploader.serializable_hash
+              next if _mounter(column.to_sym).uploaders.blank?
+              hash[column.to_s] = _mounter(column.to_sym).uploaders[0].serializable_hash
             end
           end
           super(options).merge(hash)
