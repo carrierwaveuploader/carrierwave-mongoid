@@ -99,6 +99,14 @@ module CarrierWave
           end
         end
 
+        # CarrierWave 1.1 references ::ActiveRecord constant directly which
+        # will fail in projects without ActiveRecord. We need to overwrite this
+        # method to avoid it.
+        # See https://github.com/carrierwaveuploader/carrierwave/blob/07dc4d7bd7806ab4b963cf8acbad73d97cdfe74e/lib/carrierwave/mount.rb#L189
+        def store_previous_changes_for_#{column}
+          @_previous_changes_for_#{column} = changes[_mounter(:#{column}).serialization_column]
+        end
+
         def find_previous_model_for_#{column}
           if self.embedded?
             if self.respond_to?(:__metadata) # Mongoid >= 4.0.0.beta1
