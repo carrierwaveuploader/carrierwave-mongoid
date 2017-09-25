@@ -29,7 +29,11 @@ module CarrierWave
       after_save :"store_#{column}!"
       before_save :"write_#{column}_identifier"
       after_destroy :"remove_#{column}!"
-      before_update :"store_previous_changes_for_#{column}"
+      if Gem::Version.new(CarrierWave::VERSION) >= Gem::Version.new("1.0.beta")
+        before_update :"store_previous_changes_for_#{column}"
+      else
+        before_update :"store_previous_model_for_#{column}"
+      end
       after_save :"remove_previously_stored_#{column}"
 
       class_eval <<-RUBY, __FILE__, __LINE__+1
@@ -84,13 +88,15 @@ module CarrierWave
         # track changes in embedded documents, we need to overwrite this method
         # to remove the original file if it was replaced with a new one that
         # had a different name.
-        def remove_previously_stored_#{column}
-          before, after = @_previous_changes_for_#{column}
-          # Don't delete if the files had the same name
-          return if before.nil? && after.nil?
-          # Proceed to remove the file, use the original name instead of '_new_'
-          before = @_previous_uploader_value_for_#{column} || before
-          _mounter(:#{column}).remove_previous([before], [after])
+        if Gem::Version.new(CarrierWave::VERSION) >= Gem::Version.new("1.0.beta")
+          def remove_previously_stored_#{column}
+            before, after = @_previous_changes_for_#{column}
+            # Don't delete if the files had the same name
+            return if before.nil? && after.nil?
+            # Proceed to remove the file, use the original name instead of '_new_'
+            before = @_previous_uploader_value_for_#{column} || before
+            _mounter(:#{column}).remove_previous([before], [after])
+          end
         end
 
         def find_previous_model_for_#{column}
@@ -117,8 +123,12 @@ module CarrierWave
 
           self.class.uploaders.each do |column, uploader|
             if (!only && !except) || (only && only.include?(column.to_s)) || (except && !except.include?(column.to_s))
-              next if _mounter(column.to_sym).uploaders.blank?
-              hash[column.to_s] = _mounter(column.to_sym).uploaders[0].serializable_hash
+              if Gem::Version.new(CarrierWave::VERSION) >= Gem::Version.new("1.0.beta")
+                next if _mounter(column.to_sym).uploaders.blank?
+                hash[column.to_s] = _mounter(column.to_sym).uploaders[0].serializable_hash
+              else
+                hash[column.to_s] = _mounter(column.to_sym).uploader.serializable_hash
+              end
             end
           end
           super(options).merge(hash)

@@ -117,7 +117,11 @@ describe CarrierWave::Mongoid do
         @doc.save!
         @doc.reload
 
-        expect(JSON.parse({:data => @doc.image}.to_json)).to eq("data"=>{"url"=>"/uploads/test.jpeg"})
+        if Gem::Version.new(CarrierWave::VERSION) >= Gem::Version.new("1.0.beta")
+          expect(JSON.parse({:data => @doc.image}.to_json)).to eq({"data"=>{"url"=>"/uploads/test.jpeg"}})
+        else
+          expect(JSON.parse({:data => @doc.image}.to_json)).to eq("data"=>{"image" => {"url"=>"/uploads/test.jpeg"}})
+        end
       end
 
       it "should respect options[:only] when passed to to_json for the serializable hash" do
