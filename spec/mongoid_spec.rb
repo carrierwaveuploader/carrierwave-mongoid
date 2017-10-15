@@ -117,7 +117,11 @@ describe CarrierWave::Mongoid do
         @doc.save!
         @doc.reload
 
-        expect(JSON.parse({:data => @doc.image}.to_json)).to eq("data"=>{"image"=>{"url"=>"/uploads/test.jpeg"}})
+        if Gem::Version.new(CarrierWave::VERSION) >= Gem::Version.new("1.0.beta")
+          expect(JSON.parse({:data => @doc.image}.to_json)).to eq({"data"=>{"url"=>"/uploads/test.jpeg"}})
+        else
+          expect(JSON.parse({:data => @doc.image}.to_json)).to eq("data"=>{"image" => {"url"=>"/uploads/test.jpeg"}})
+        end
       end
 
       it "should respect options[:only] when passed to to_json for the serializable hash" do
@@ -409,7 +413,7 @@ describe CarrierWave::Mongoid do
     end
 
     after do
-      FileUtils.rm_rf(file_path("uploads"))
+      FileUtils.rm_rf(public_path("uploads"))
     end
 
     describe 'normally' do
@@ -422,7 +426,7 @@ describe CarrierWave::Mongoid do
       end
 
       it "should not remove old file if old file had a different path but config is false" do
-        allow(@uploader).to receive(:remove_previously_stored_files_after_update).and_return(false)
+        @doc.image.class.remove_previously_stored_files_after_update = false
         @doc.image = stub_file('new.jpeg')
         expect(@doc.save).to be_truthy
         expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
@@ -482,7 +486,7 @@ describe CarrierWave::Mongoid do
       end
 
       it "should not remove old file if old file had a different path but config is false" do
-        allow(@embedded_doc.image).to receive(:remove_previously_stored_files_after_update).and_return(false)
+        @embedded_doc.image.class.remove_previously_stored_files_after_update = false
         @embedded_doc.image = stub_file('new.jpeg')
         expect(@embedded_doc.save).to be_truthy
         expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
@@ -520,7 +524,7 @@ describe CarrierWave::Mongoid do
       end
 
       it "should not remove old file if old file had a different path but config is false" do
-        allow(@double_embedded_doc.image).to receive(:remove_previously_stored_files_after_update).and_return(false)
+        @double_embedded_doc.image.class.remove_previously_stored_files_after_update = false
         @double_embedded_doc.image = stub_file('new.jpeg')
         expect(@double_embedded_doc.save).to be_truthy
         expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
