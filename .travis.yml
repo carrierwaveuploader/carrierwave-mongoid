@@ -7,8 +7,9 @@ notifications:
 language: ruby
 cache: bundler
 rvm:
-  - 2.2.6
-  - 2.3.3
+  - 2.2.8
+  - 2.3.5
+  - 2.4.2
 
 gemfile:
   - Gemfile
