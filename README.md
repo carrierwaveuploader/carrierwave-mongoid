@@ -45,7 +45,7 @@ Follow the "Getting Started" directions in the main
 protection:
 
 ```ruby
-attr_accessible :avatar, :avatar_cache
+attr_accessor :avatar, :avatar_cache
 ```
 
 Now you can cache files by assigning them to the attribute; they will
