@@ -41,13 +41,6 @@ gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
 Follow the "Getting Started" directions in the main
 [Carrierwave repository](https://github.com/carrierwaveuploader/carrierwave/).
 
-[Suggested] Add the field to your attr_accessor list for mass assignment
-protection:
-
-```ruby
-attr_accessible :avatar, :avatar_cache
-```
-
 Now you can cache files by assigning them to the attribute; they will
 automatically be stored when the record is saved. Ex:
 
