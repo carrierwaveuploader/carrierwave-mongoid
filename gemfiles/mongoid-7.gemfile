@@ -1,0 +1,6 @@
+source "https://rubygems.org"
+
+gem "mongoid", "~> 7.0"
+gem "carrierwave", "~> 1.2"
+
+gemspec path: "../"
