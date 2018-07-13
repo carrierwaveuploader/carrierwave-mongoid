@@ -151,6 +151,7 @@ match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#thumb_avatar', constr
 
 | Version   | Notes                                                                           |
 |-----------|---------------------------------------------------------------------------------|
+| ~> 1.1.0  | ([compare][compare-1.1], [dependencies][deps-1.1]) Mongoid 7.0 support          |
 | ~> 1.0.0  | ([compare][compare-1.0], [dependencies][deps-1.0]) Carrierwave 1.x support      |
 | ~> 0.10.0 | ([compare][compare-0.10], [dependencies][deps-0.10]) Mongoid 6.0  support       |
 | ~> 0.9.0  | ([compare][compare-0.9], [dependencies][deps-0.9]) Carrierwave 0.11 support     |
@@ -163,6 +164,7 @@ match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#thumb_avatar', constr
 | ~> 0.2.0  | ([compare][compare-0.2], [dependencies][deps-0.2]) Rails >= 3.2, Mongoid ~> 2.0 |
 | ~> 0.1.0  | ([compare][compare-0.1], [dependencies][deps-0.1]) Rails <= 3.1                 |
 
+[compare-1.1]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v1.0.0...v1.1.0
 [compare-1.0]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.10.0...v1.0.0
 [compare-0.10]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.9.0...v0.10.0
 [compare-0.9]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.8.1...v0.9.0
@@ -175,6 +177,7 @@ match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#thumb_avatar', constr
 [compare-0.2]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.1.7...v0.2.2
 [compare-0.1]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.1.1...v0.1.7
 
+[deps-1.1]: https://rubygems.org/gems/carrierwave-mongoid/versions/1.1.0
 [deps-1.0]: https://rubygems.org/gems/carrierwave-mongoid/versions/1.0.0
 [deps-0.10]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.10.0
 [deps-0.9]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.9.0
