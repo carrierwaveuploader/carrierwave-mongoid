@@ -94,7 +94,7 @@ module CarrierWave
             # Don't delete if the files had the same name
             return if before.nil? && after.nil?
             # Proceed to remove the file, use the original name instead of '_new_'
-            before = @_previous_uploader_value_for_#{column} || before
+            before = @_previous_uploader_value_for_#{column}
             _mounter(:#{column}).remove_previous([before], [after])
           end
         end
