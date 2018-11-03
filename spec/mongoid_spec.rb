@@ -400,6 +400,24 @@ describe CarrierWave::Mongoid do
 
   end
 
+  describe '#reload' do
+
+    before do
+      @mongo_user_klass = reset_mongo_class
+      @doc = @mongo_user_klass.new
+      @doc.save
+    end
+
+    it 'reset cached value on reload' do
+      new = @mongo_user_klass.find(@doc.id)
+      new.image = stub_file('test.jpeg')
+      new.save
+
+      expect(@doc.reload.image).to_not be_blank
+    end
+
+  end
+
   describe '#mount_uploader removing old files' do
 
     before do
