@@ -7,7 +7,6 @@ notifications:
 language: ruby
 cache: bundler
 rvm:
-  - 2.2.9
   - 2.3.8
   - 2.4.5
   - 2.5.3
