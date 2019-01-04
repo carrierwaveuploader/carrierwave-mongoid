@@ -8,3 +8,4 @@ spec/public
 Gemfile.lock
 gemfiles/*.lock
 log/*
+.idea
