@@ -154,11 +154,12 @@ describe CarrierWave::Storage::GridFS do
         @uploader_class.class_eval{
           include CarrierWave::MiniMagick
           storage :grid_fs
+          process resize_to_fill: [200, 200]
         }
 
         @versioned = @uploader_class.new
 
-        @versioned.store! File.open(file_path('portrait.jpg'))
+        @file = File.open(file_path('portrait.jpg'))
       end
 
       after do
@@ -166,9 +167,30 @@ describe CarrierWave::Storage::GridFS do
       end
 
       it "resizes the file with out error" do
-        expect { @versioned.resize_to_fill(200, 200) }.not_to raise_error
+        expect { @versioned.store! @file }.not_to raise_error
       end
     end
+
+    describe "#clean_cache!" do
+      before do
+        @uploader_class = Class.new(CarrierWave::Uploader::Base)
+        @uploader_class.class_eval{
+          storage :grid_fs
+        }
+
+        file = File.open(file_path('portrait.jpg'))
+        @filenames = [Time.now.utc - 3700, Time.now.utc - 3610, Time.now.utc - 3590].map do |time|
+          "#{time.to_i}-1234-5678-9000/portrait.jpg"
+        end
+        @filenames << "not-a-cache/portrait.jpg"
+        @filenames.each { |filename| @grid[filename] = file }
+      end
+
+      it "cleans old cache files" do
+        @uploader_class.clean_cached_files!(3600)
+        expect(@grid.namespace.file_model.all.to_a.map(&:filename)).to eq @filenames[2..3]
+      end
+    end if CarrierWave::VERSION >= '2'
   end
 
   after do

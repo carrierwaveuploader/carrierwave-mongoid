@@ -44,7 +44,7 @@ module CarrierWave
         end
 
         def write(file)
-          grid[@uploader.store_path] = file
+          grid[path] = file
         ensure
           @grid_file = nil
         end
@@ -109,6 +109,55 @@ module CarrierWave
         CarrierWave::Storage::GridFS::File.new(uploader, uploader.store_path(identifier))
       end
 
+      ##
+      # Cache the file in MongoDB's GridFS GridStore
+      #
+      # === Parameters
+      #
+      # [file (CarrierWave::SanitizedFile)] the file to store
+      #
+      # === Returns
+      #
+      # [CarrierWave::SanitizedFile] a sanitized file
+      #
+      def cache!(file)
+        stored = CarrierWave::Storage::GridFS::File.new(uploader, uploader.cache_path)
+        stored.write(file)
+        stored
+      end
+
+      ##
+      # Retrieve the cached file from MongoDB's GridFS GridStore
+      #
+      # === Parameters
+      #
+      # [identifier (String)] uniquely identifies a cache file
+      #
+      # === Returns
+      #
+      # [CarrierWave::Storage::GridFS::File] a sanitized file
+      #
+      def retrieve_from_cache!(identifier)
+        CarrierWave::Storage::GridFS::File.new(uploader, uploader.cache_path(identifier))
+      end
+
+      def delete_dir!(path)
+        # do nothing, because there's no such things as 'empty directory'
+      end
+
+      ##
+      # Clean old caches
+      #
+      # === Parameters
+      #
+      # [seconds (Integer)] duration in seconds, caches older than this will be deleted
+      #
+      def clean_cache!(seconds)
+        File.grid.namespace.
+          where(filename: /\d+-\d+-\d+(?:-\d+)?\/.+/).
+          and(:filename.lt => (Time.now.utc - seconds).to_i.to_s).
+          delete
+      end
     end # GridFS
   end # Storage
 end # CarrierWave
