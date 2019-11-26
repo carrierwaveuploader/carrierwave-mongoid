@@ -139,6 +139,21 @@ describe CarrierWave::Mongoid do
         expect(JSON.parse(@doc.to_json({:except => [:_id, :image]}))).to eq("folder" => "")
       end
 
+      it "resets cached value on record reload" do
+        @doc[:image] = 'test.jpeg'
+        @doc.save!
+        @doc.reload
+
+        expect(JSON.parse(@doc.to_json)["image"]).to eq("url" => "/uploads/test.jpeg")
+
+        doc = @doc.class.find(@doc.id)
+        doc[:image] = nil
+        doc.save!
+
+        @doc.reload
+        expect(JSON.parse(@doc.to_json)["image"]).to eq("url" => nil)
+      end
+
     end
 
   end
