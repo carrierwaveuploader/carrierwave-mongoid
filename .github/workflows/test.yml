@@ -1,0 +1,45 @@
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        mongodb: [ '4.4' ]
+        ruby: [ '2.4', '2.5', '2.6' ]
+        bundler: [ '2.1.4' ]
+        gemfile:
+          - Gemfile
+          - gemfiles/carrierwave-0.10.gemfile
+          - gemfiles/carrierwave-0.11.gemfile
+          - gemfiles/carrierwave-1.1.gemfile
+          - gemfiles/carrierwave-1.2.gemfile
+          - gemfiles/carrierwave-1.3.gemfile
+          - gemfiles/carrierwave-2.0.gemfile
+          - gemfiles/mongoid-3.gemfile
+          - gemfiles/mongoid-4.gemfile
+          - gemfiles/mongoid-5.gemfile
+          - gemfiles/mongoid-6.gemfile
+          - gemfiles/mongoid-7.gemfile
+    name: Ruby ${{ matrix.ruby }} with ${{ matrix.gemfile }}
+    env:
+      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+    steps:
+      - name: Set up MongoDB ${{ matrix.mongodb }}
+        uses: supercharge/mongodb-github-action@1.3.0
+        with:
+          mongodb-version: ${{ matrix.mongodb }}
+      - uses: actions/checkout@v2
+      - name: Set up Ruby ${{ matrix.ruby }}
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - name: Install Bundler ${{ matrix.bundler }}
+        run: gem install bundler -v ${{ matrix.bundler }}
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - run: bundle install
+      - run: bundle exec rake
