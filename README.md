@@ -1,8 +1,7 @@
 # CarrierWave for Mongoid
 
 [![Gem Version](http://img.shields.io/gem/v/carrierwave-mongoid.svg)](https://rubygems.org/gems/carrierwave-mongoid)
-[![Build Status](https://travis-ci.org/carrierwaveuploader/carrierwave-mongoid.svg)](http://travis-ci.org/carrierwaveuploader/carrierwave-mongoid)
-[![Code Climate](http://img.shields.io/codeclimate/github/carrierwaveuploader/carrierwave-mongoid.svg)](https://codeclimate.com/github/carrierwaveuploader/carrierwave-mongoid)
+[![Build Status](https://github.com/carrierwaveuploader/carrierwave-mongoid/workflows/.github/workflows/test.yml/badge.svg?branch=master)](https://github.com/carrierwaveuploader/carrierwave-mongoid/actions?query=workflow%3A.github%2Fworkflows%2Ftest.yml+branch%3Amaster)
 [![Gem Downloads](https://img.shields.io/gem/dt/carrierwave-mongoid.svg)](https://rubygems.org/gems/carrierwave-mongoid)
 
 This gem adds support for Mongoid and MongoDB's GridFS to
