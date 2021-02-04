@@ -14,6 +14,7 @@ jobs:
           - carrierwave-1.2
           - carrierwave-1.3
           - carrierwave-2.0
+          - carrierwave-2.1
           - mongoid-3
           - mongoid-4
           - mongoid-5
