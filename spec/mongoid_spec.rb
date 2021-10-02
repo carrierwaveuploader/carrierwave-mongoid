@@ -10,13 +10,6 @@ def reset_mongo_class(uploader = MongoUploader)
   end
 end
 
-def define_mongo_class(class_name, &block)
-  Object.send(:remove_const, class_name) rescue nil
-  klass = Object.const_set(class_name, Class.new)
-  klass.class_eval(&block)
-  klass
-end
-
 class MongoUploader < CarrierWave::Uploader::Base; end
 class AnotherMongoUploader < CarrierWave::Uploader::Base; end
 
@@ -175,7 +168,7 @@ describe CarrierWave::Mongoid do
         expect(@doc.image).to be_an_instance_of(MongoUploader)
       end
 
-      it "should write nothing to the database, to prevent overriden filenames to fail because of unassigned attributes" do
+      it "should write nothing to the database, to prevent overridden filenames to fail because of unassigned attributes" do
         expect(@doc[:image]).to be_nil
       end
 
@@ -447,7 +440,7 @@ describe CarrierWave::Mongoid do
       end
     end
 
-    describe 'with an overriden filename' do
+    describe 'with an overridden filename' do
       before do
         @uploader.class_eval do
           def filename

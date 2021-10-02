@@ -81,3 +81,10 @@ RSpec.configure do |config|
   config.include CarrierWave::Test::I18nHelpers
   config.color = true
 end
+
+def define_mongo_class(class_name, &block)
+  Object.send(:remove_const, class_name) rescue nil
+  klass = Object.const_set(class_name, Class.new)
+  klass.class_eval(&block)
+  klass
+end
