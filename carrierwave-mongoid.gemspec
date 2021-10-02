@@ -24,8 +24,8 @@ Gem::Specification.new do |s|
   s.add_dependency "mongoid", [">= 3.0", "< 8.0"]
   s.add_dependency "mongoid-grid_fs", [">= 1.3", "< 3.0"]
   s.add_dependency "mime-types", "< 3" if RUBY_VERSION < "2.0" # mime-types 3+ doesn't support ruby 1.9
-  s.add_development_dependency "rspec", "~>3.4.0"
-  s.add_development_dependency "rake", "~>11.1.2"
+  s.add_development_dependency "rspec", "~> 3.4"
+  s.add_development_dependency "rake", ">= 12.3.3"
   s.add_development_dependency "mini_magick"
   s.add_development_dependency "pry"
 end
