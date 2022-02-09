@@ -229,4 +229,4 @@ class User
 end
 ```
 
-You can read more about this [here](https://github.com/carrierwaveuploader/carrierwave/issues#issue/81)
+You can read more about this [here](https://github.com/carrierwaveuploader/carrierwave/issues/81)
