@@ -101,7 +101,11 @@ shared_examples_for "a GridFS connection" do
 
 end
 
-describe CarrierWave::Storage::GridFS do
+describe 'CarrierWave::Storage::GridFS' do
+  before(:context) do
+    require 'mongoid-grid_fs'
+    require 'carrierwave/storage/grid_fs'
+  end
 
   before do
     @uploader = double('an uploader')

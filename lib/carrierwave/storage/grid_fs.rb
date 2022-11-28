@@ -161,3 +161,11 @@ module CarrierWave
     end # GridFS
   end # Storage
 end # CarrierWave
+
+class CarrierWave::Uploader::Base
+  add_config :grid_fs_access_url
+
+  configure do |config|
+    config.storage_engines[:grid_fs] = "CarrierWave::Storage::GridFS"
+  end
+end
