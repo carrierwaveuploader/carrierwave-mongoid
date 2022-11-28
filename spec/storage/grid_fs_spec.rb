@@ -103,6 +103,8 @@ end
 
 describe 'CarrierWave::Storage::GridFS' do
   before(:context) do
+    skip unless ENV['WITH_GRIDFS'] == 'true'
+
     require 'mongoid-grid_fs'
     require 'carrierwave/storage/grid_fs'
   end

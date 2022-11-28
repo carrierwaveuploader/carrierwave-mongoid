@@ -29,11 +29,12 @@ Or, in Rails you can add it to your Gemfile:
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 ```
 
-Note: If using Rails 4, you'll need to make sure `mongoid-grid_fs` is `>= 1.9.0`.
-If in doubt, run `bundle update mongoid-grid_fs`
+Note: `mongoid-grid_fs` is no longer a runtime dependency. If you want to use
+GridFS storage, you'll need to make sure `mongoid-grid_fs` is in your Gemfile
+and uses version `>= 1.9.0`:
 
 ```ruby
-gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
+gem 'mongoid-grid_fs', '>= 1.9.0'
 ```
 
 ## Getting Started
@@ -52,6 +53,10 @@ u.save!
 
 ## Using MongoDB's GridFS store
 
+Add `mongoid-grid_fs` to your Gemfile and
+
+    require 'carrierwave/storage/grid_fs'
+
 In your uploader, set the storage to `:grid_fs`:
 
 ```ruby
@@ -65,6 +70,8 @@ database connection and default all storage to GridFS. That might look something
 like this:
 
 ```ruby
+require 'carrierwave/storage/grid_fs'
+
 CarrierWave.configure do |config|
   config.storage = :grid_fs
   config.root = Rails.root.join('tmp')
@@ -151,6 +158,7 @@ match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#thumb_avatar', constr
 
 | Version   | Notes                                                                           |
 |-----------|---------------------------------------------------------------------------------|
+| ~> 2.0.0  | ([compare][compare-2.0], [dependencies][deps-2.0]) GridFS is now optional       |
 | ~> 1.1.0  | ([compare][compare-1.1], [dependencies][deps-1.1]) Mongoid 7.0 support          |
 | ~> 1.0.0  | ([compare][compare-1.0], [dependencies][deps-1.0]) Carrierwave 1.x support      |
 | ~> 0.10.0 | ([compare][compare-0.10], [dependencies][deps-0.10]) Mongoid 6.0  support       |
@@ -164,6 +172,7 @@ match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#thumb_avatar', constr
 | ~> 0.2.0  | ([compare][compare-0.2], [dependencies][deps-0.2]) Rails >= 3.2, Mongoid ~> 2.0 |
 | ~> 0.1.0  | ([compare][compare-0.1], [dependencies][deps-0.1]) Rails <= 3.1                 |
 
+[compare-2.0]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v1.3.0...v2.0.0
 [compare-1.1]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v1.0.0...v1.1.0
 [compare-1.0]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.10.0...v1.0.0
 [compare-0.10]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.9.0...v0.10.0
@@ -177,6 +186,7 @@ match '/uploads/grid/user/avatar/:id/:filename' => 'gridfs#thumb_avatar', constr
 [compare-0.2]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.1.7...v0.2.2
 [compare-0.1]: https://github.com/carrierwaveuploader/carrierwave-mongoid/compare/v0.1.1...v0.1.7
 
+[deps-1.1]: https://rubygems.org/gems/carrierwave-mongoid/versions/2.0.0
 [deps-1.1]: https://rubygems.org/gems/carrierwave-mongoid/versions/1.1.0
 [deps-1.0]: https://rubygems.org/gems/carrierwave-mongoid/versions/1.0.0
 [deps-0.10]: https://rubygems.org/gems/carrierwave-mongoid/versions/0.10.0
