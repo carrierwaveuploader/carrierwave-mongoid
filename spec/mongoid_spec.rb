@@ -420,7 +420,7 @@ describe CarrierWave::Mongoid do
       @doc = @class.new
       @doc.image = stub_file('old.jpeg')
       expect(@doc.save).to be_truthy
-      expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
     end
 
     after do
@@ -432,29 +432,29 @@ describe CarrierWave::Mongoid do
       it "should remove old file if old file had a different path" do
         @doc.image = stub_file('new.jpeg')
         expect(@doc.save).to be_truthy
-        expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
-        expect(File.exists?(public_path('uploads/old.jpeg'))).to be_falsey
+        expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/old.jpeg'))).to be_falsey
       end
 
       it "should not remove old file if old file had a different path but config is false" do
         @doc.image.class.remove_previously_stored_files_after_update = false
         @doc.image = stub_file('new.jpeg')
         expect(@doc.save).to be_truthy
-        expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
-        expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
       end
 
       it "should not remove file if old file had the same path" do
         @doc.image = stub_file('old.jpeg')
         expect(@doc.save).to be_truthy
-        expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
       end
 
       it "should not remove file if validations fail on save" do
         @class.validate { |r| r.errors.add :textfile, "FAIL!" }
         @doc.image = stub_file('new.jpeg')
         expect(@doc.save).to be_falsey
-        expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
       end
     end
 
@@ -469,22 +469,22 @@ describe CarrierWave::Mongoid do
         @doc.image = stub_file('old.jpeg')
         @doc.foo = "test"
         expect(@doc.save).to be_truthy
-        expect(File.exists?(public_path('uploads/test.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/test.jpeg'))).to be_truthy
         expect(@doc.image.read).to eq "this is stuff"
       end
 
       it "should not remove file if old file had the same dynamic path" do
         @doc.image = stub_file('test.jpeg')
         expect(@doc.save).to be_truthy
-        expect(File.exists?(public_path('uploads/test.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/test.jpeg'))).to be_truthy
       end
 
       it "should remove old file if old file had a different dynamic path" do
         @doc.foo = "new"
         @doc.image = stub_file('test.jpeg')
         expect(@doc.save).to be_truthy
-        expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
-        expect(File.exists?(public_path('uploads/test.jpeg'))).to be_falsey
+        expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/test.jpeg'))).to be_falsey
       end
     end
 
@@ -492,29 +492,29 @@ describe CarrierWave::Mongoid do
       it "should remove old file if old file had a different path" do
         @embedded_doc.image = stub_file('new.jpeg')
         expect(@embedded_doc.save).to be_truthy
-        expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
-        expect(File.exists?(public_path('uploads/old.jpeg'))).to be_falsey
+        expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/old.jpeg'))).to be_falsey
       end
 
       it "should not remove old file if old file had a different path but config is false" do
         @embedded_doc.image.class.remove_previously_stored_files_after_update = false
         @embedded_doc.image = stub_file('new.jpeg')
         expect(@embedded_doc.save).to be_truthy
-        expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
-        expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
       end
 
       it "should not remove file if old file had the same path" do
         @embedded_doc.image = stub_file('old.jpeg')
         expect(@embedded_doc.save).to be_truthy
-        expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
       end
 
       it "should not remove file if validations fail on save" do
         @embedded_doc_class.validate { |r| r.errors.add :textfile, "FAIL!" }
         @embedded_doc.image = stub_file('new.jpeg')
         expect(@embedded_doc.save).to be_falsey
-        expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
       end
 
       it "should not touch parent's dirty attributes" do
@@ -530,29 +530,29 @@ describe CarrierWave::Mongoid do
       it "should remove old file if old file had a different path" do
         @double_embedded_doc.image = stub_file('new.jpeg')
         expect(@double_embedded_doc.save).to be_truthy
-        expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
-        expect(File.exists?(public_path('uploads/old.jpeg'))).to be_falsey
+        expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/old.jpeg'))).to be_falsey
       end
 
       it "should not remove old file if old file had a different path but config is false" do
         @double_embedded_doc.image.class.remove_previously_stored_files_after_update = false
         @double_embedded_doc.image = stub_file('new.jpeg')
         expect(@double_embedded_doc.save).to be_truthy
-        expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
-        expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
       end
 
       it "should not remove file if old file had the same path" do
         @double_embedded_doc.image = stub_file('old.jpeg')
         expect(@double_embedded_doc.save).to be_truthy
-        expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
       end
 
       it "should not remove file if validations fail on save" do
         @double_embedded_doc_class.validate { |r| r.errors.add :textfile, "FAIL!" }
         @double_embedded_doc.image = stub_file('new.jpeg')
         expect(@double_embedded_doc.save).to be_falsey
-        expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
+        expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
       end
 
     end
@@ -763,8 +763,8 @@ describe CarrierWave::Mongoid do
       @doc = @class.new
       @doc.image = stub_file('old.jpeg')
       expect(@doc.save).to be_truthy
-      expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
-      expect(File.exists?(public_path('uploads/thumb_old.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/thumb_old.jpeg'))).to be_truthy
     end
 
     after do
@@ -774,17 +774,17 @@ describe CarrierWave::Mongoid do
     it "should remove old file if old file had a different path" do
       @doc.image = stub_file('new.jpeg')
       expect(@doc.save).to be_truthy
-      expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
-      expect(File.exists?(public_path('uploads/thumb_new.jpeg'))).to be_truthy
-      expect(File.exists?(public_path('uploads/old.jpeg'))).to be_falsey
-      expect(File.exists?(public_path('uploads/thumb_old.jpeg'))).to be_falsey
+      expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/thumb_new.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.jpeg'))).to be_falsey
+      expect(File.exist?(public_path('uploads/thumb_old.jpeg'))).to be_falsey
     end
 
     it "should not remove file if old file had the same path" do
       @doc.image = stub_file('old.jpeg')
       expect(@doc.save).to be_truthy
-      expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
-      expect(File.exists?(public_path('uploads/thumb_old.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/thumb_old.jpeg'))).to be_truthy
     end
   end
 
@@ -799,8 +799,8 @@ describe CarrierWave::Mongoid do
       @doc.image = stub_file('old.jpeg')
       @doc.textfile = stub_file('old.txt')
       expect(@doc.save).to be_truthy
-      expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
-      expect(File.exists?(public_path('uploads/old.txt'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.txt'))).to be_truthy
     end
 
     after do
@@ -811,27 +811,27 @@ describe CarrierWave::Mongoid do
       @doc.image = stub_file('new.jpeg')
       @doc.textfile = stub_file('new.txt')
       expect(@doc.save).to be_truthy
-      expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
-      expect(File.exists?(public_path('uploads/old.jpeg'))).to be_falsey
-      expect(File.exists?(public_path('uploads/new.txt'))).to be_truthy
-      expect(File.exists?(public_path('uploads/old.txt'))).to be_falsey
+      expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.jpeg'))).to be_falsey
+      expect(File.exist?(public_path('uploads/new.txt'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.txt'))).to be_falsey
     end
 
     it "should remove old file1 but not file2 if old file1 had a different path but old file2 has the same path" do
       @doc.image = stub_file('new.jpeg')
       @doc.textfile = stub_file('old.txt')
       expect(@doc.save).to be_truthy
-      expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
-      expect(File.exists?(public_path('uploads/old.jpeg'))).to be_falsey
-      expect(File.exists?(public_path('uploads/old.txt'))).to be_truthy
+      expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.jpeg'))).to be_falsey
+      expect(File.exist?(public_path('uploads/old.txt'))).to be_truthy
     end
 
     it "should not remove file1 or file2 if file1 and file2 have the same paths" do
       @doc.image = stub_file('old.jpeg')
       @doc.textfile = stub_file('old.txt')
       expect(@doc.save).to be_truthy
-      expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
-      expect(File.exists?(public_path('uploads/old.txt'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.txt'))).to be_truthy
     end
   end
 
@@ -844,7 +844,7 @@ describe CarrierWave::Mongoid do
       @doc = @class.new
       @doc.avatar = stub_file('old.jpeg')
       expect(@doc.save).to be_truthy
-      expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
     end
 
     after do
@@ -854,14 +854,14 @@ describe CarrierWave::Mongoid do
     it "should remove old file if old file had a different path" do
       @doc.avatar = stub_file('new.jpeg')
       expect(@doc.save).to be_truthy
-      expect(File.exists?(public_path('uploads/new.jpeg'))).to be_truthy
-      expect(File.exists?(public_path('uploads/old.jpeg'))).to be_falsey
+      expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.jpeg'))).to be_falsey
     end
 
     it "should not remove file if old file had the same path" do
       @doc.avatar = stub_file('old.jpeg')
       expect(@doc.save).to be_truthy
-      expect(File.exists?(public_path('uploads/old.jpeg'))).to be_truthy
+      expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
     end
   end
 
