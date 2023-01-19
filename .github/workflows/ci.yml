@@ -11,6 +11,7 @@ jobs:
           - carrierwave-2.1
           - carrierwave-2.2
           - mongoid-7
+          - mongoid-8
         include:
           - { mongodb: "4.4", ruby: "2.6", gemfile: "carrierwave-0.10" }
           - { mongodb: "4.4", ruby: "2.6", gemfile: "carrierwave-0.11" }
