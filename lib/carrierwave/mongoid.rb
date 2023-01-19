@@ -109,11 +109,14 @@ module CarrierWave
 
         def find_previous_model_for_#{column}
           if self.embedded?
-            if self.respond_to?(:__metadata) # Mongoid >= 4.0.0.beta1
-              ancestors = [[ self.__metadata.key, self._parent ]].tap { |x| x.unshift([ x.first.last.__metadata.key, x.first.last._parent ]) while x.first.last.embedded? }
-            else # Mongoid < 4.0.0.beta1
-              ancestors = [[ self.metadata.key, self._parent ]].tap { |x| x.unshift([ x.first.last.metadata.key, x.first.last._parent ]) while x.first.last.embedded? }
-            end
+            ancestors =
+              if self.respond_to?(:_association) # Mongoid >= 7.0.0.beta
+                [[ self._association.key, self._parent ]].tap { |x| x.unshift([ x.first.last._association.key, x.first.last._parent ]) while x.first.last.embedded? }
+              elsif self.respond_to?(:__metadata) # Mongoid >= 4.0.0.beta1 < 7.0.0.beta
+                [[ self.__metadata.key, self._parent ]].tap { |x| x.unshift([ x.first.last.__metadata.key, x.first.last._parent ]) while x.first.last.embedded? }
+              else # Mongoid < 4.0.0.beta1
+                [[ self.metadata.key, self._parent ]].tap { |x| x.unshift([ x.first.last.metadata.key, x.first.last._parent ]) while x.first.last.embedded? }
+              end
             first_parent = ancestors.first.last
             reloaded_parent = first_parent.class.unscoped.find(first_parent.to_key.first)
             association = ancestors.inject(reloaded_parent) { |parent,(key,ancestor)| (parent.is_a?(Array) ? parent.find(ancestor.to_key.first) : parent).send(key) }
