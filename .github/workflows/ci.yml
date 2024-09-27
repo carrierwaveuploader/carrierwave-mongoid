@@ -38,9 +38,9 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - run: cat /home/runner/work/carrierwave-mongoid/carrierwave-mongoid/vendor/bundle/ruby/3.0.0/extensions/x86_64-linux/3.0.0/mimemagic-0.4.3/gem_make.out
+      - run: cat /home/runner/work/carrierwave-mongoid/carrierwave-mongoid/vendor/bundle/ruby/${{ matrix.ruby }}/extensions/x86_64-linux/${{ matrix.ruby }}/mimemagic-0.4.3/gem_make.out
         if: ${{ failure() }}
-      - run: cat /home/runner/work/carrierwave-mongoid/carrierwave-mongoid/vendor/bundle/ruby/3.0.0/gems/mimemagic-0.4.3/ext/mimemagic/Rakefile
+      - run: cat /home/runner/work/carrierwave-mongoid/carrierwave-mongoid/vendor/bundle/ruby/${{ matrix.ruby }}/gems/mimemagic-0.4.3/ext/mimemagic/Rakefile
         if: ${{ failure() }}
       - name: Run tests
         run: bundle exec rake
