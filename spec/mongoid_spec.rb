@@ -623,11 +623,13 @@ describe CarrierWave::Mongoid do
 
       it "attaches a new file to an existing document that had no file at first" do
         doc = @class.new
-        doc.mongo_locations.build
+        new_file = doc.mongo_locations.build
+        expect(new_file.save).to be_truthy
         expect(doc.save).to be_truthy
         doc.reload
 
-        doc.mongo_locations.first.image = stub_file('test.jpeg')
+        new_file.image = stub_file('test.jpeg')
+        expect(new_file.save).to be_truthy
         expect(doc.save).to be_truthy
         doc.reload
 
