@@ -48,7 +48,7 @@ module CarrierWave
           @_previous_uploader_value_for_#{column} = previous_uploader_value
 
           # mongoid won't upload a new file if there was no file previously.
-          write_uploader(column, '_old_') if self.persisted? && read_uploader(column).nil?
+          write_uploader(column, '_old_') if self.persisted? && read_uploader(column).nil? && !new_file.nil?
 
           send(:"\#{column}_will_change!")
           super
