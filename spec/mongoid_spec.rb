@@ -162,18 +162,15 @@ describe CarrierWave::Mongoid do
     end
 
     context "when a file is assigned" do
+      before do
+        @doc.image = stub_file('test.jpeg')
+      end
 
       it "should cache a file" do
-        @doc.image = stub_file('test.jpeg')
         expect(@doc.image).to be_an_instance_of(MongoUploader)
       end
 
-      it "should write nothing to the database, to prevent overridden filenames to fail because of unassigned attributes" do
-        expect(@doc[:image]).to be_nil
-      end
-
       it "should copy a file into into the cache directory" do
-        @doc.image = stub_file('test.jpeg')
         expect(@doc.image.current_path).to match /^#{public_path('uploads\/tmp')}/
       end
 

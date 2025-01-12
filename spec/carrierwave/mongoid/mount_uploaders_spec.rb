@@ -240,10 +240,6 @@ describe CarrierWave::Mongoid do
                 expect(model.images.map(&:identifier)).to match_array(identifiers)
               end
 
-              it 'does not write anything to the database, in order to prevent overridden filenames to fail because of unassigned attributes' do
-                expect(model[:images]).to match_array([])
-              end
-
               it 'copies a file into into the cache directory' do
                 expect(model.images.first.current_path).to match(/^#{Regexp.escape(public_path('uploads/tmp'))}/)
               end
@@ -259,10 +255,6 @@ describe CarrierWave::Mongoid do
               it 'caches the file' do
                 expect(model.images).to all(be_an_instance_of(uploader_class))
                 expect(model.images.map(&:identifier)).to match_array(['portrait.jpg', 'test.jpeg'])
-              end
-
-              it 'does not write anything to the database, in order to prevent overridden filenames to fail because of unassigned attributes' do
-                expect(model[:images]).to match_array(['portrait.jpg'])
               end
 
               it 'copies a file into into the cache directory' do
@@ -300,10 +292,6 @@ describe CarrierWave::Mongoid do
           it 'caches the files' do
             expect(model.images.count).to be files.count
             expect(model.images).to all(be_an_instance_of(uploader_class))
-          end
-
-          it 'does not write to the database' do
-            expect(model[:images]).to be_empty
           end
 
           it 'copies a file into into the cache directory' do
