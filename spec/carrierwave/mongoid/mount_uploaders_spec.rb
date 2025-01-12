@@ -140,6 +140,7 @@ describe CarrierWave::Mongoid do
 
       describe 'model#remove_uploaders=' do
         before do
+          model.images = [stub_file('test.jpg')]
           model.save
         end
 
@@ -208,7 +209,7 @@ describe CarrierWave::Mongoid do
 
             before do
               model.save!
-              model.collection.update_one({ _id: model.id }, { images: identifiers })
+              model.collection.update_one({ _id: model.id }, '$set' => { images: identifiers })
             end
 
             it 'returns an array of uploaders' do
@@ -492,6 +493,8 @@ describe CarrierWave::Mongoid do
             expect(model.save).to be_truthy
             expect(File).to exist(public_path('uploads/new.jpeg'))
             expect(File).to exist(public_path('uploads/old.jpeg'))
+          ensure
+            uploader_class.remove_previously_stored_files_after_update = true
           end
 
           it 'does not remove file if old file had the same path' do
@@ -553,6 +556,8 @@ describe CarrierWave::Mongoid do
             expect(embedded_model.save).to be_truthy
             expect(File).to exist(public_path('uploads/new.jpeg'))
             expect(File).to exist(public_path('uploads/old.jpeg'))
+          ensure
+            uploader_class.remove_previously_stored_files_after_update = true
           end
 
           it 'does not remove file if old file had the same path' do
@@ -592,6 +597,8 @@ describe CarrierWave::Mongoid do
             expect(double_embedded_model.save).to be_truthy
             expect(File).to exist(public_path('uploads/new.jpeg'))
             expect(File).to exist(public_path('uploads/old.jpeg'))
+          ensure
+            uploader_class.remove_previously_stored_files_after_update = true
           end
 
           it 'does not remove file if old file had the same path' do

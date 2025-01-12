@@ -3,6 +3,7 @@ pkg/*
 *.sw*
 .bundle
 spec/public
+spec/tmp
 .rvmrc
 .ruby-version
 Gemfile.lock

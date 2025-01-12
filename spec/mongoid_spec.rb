@@ -237,6 +237,8 @@ describe CarrierWave::Mongoid do
     before do
       mongo_user_klass = reset_mongo_class
       @doc = mongo_user_klass.new
+      @doc.image = stub_file('test.jpg')
+      @doc.save!
     end
 
     it "treats true argument such that attribute is marked as changed" do
@@ -442,6 +444,8 @@ describe CarrierWave::Mongoid do
         expect(@doc.save).to be_truthy
         expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
         expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
+      ensure
+        @doc.image.class.remove_previously_stored_files_after_update = true
       end
 
       it "should not remove file if old file had the same path" do
@@ -502,6 +506,8 @@ describe CarrierWave::Mongoid do
         expect(@embedded_doc.save).to be_truthy
         expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
         expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
+      ensure
+        @embedded_doc.image.class.remove_previously_stored_files_after_update = true
       end
 
       it "should not remove file if old file had the same path" do
@@ -540,6 +546,8 @@ describe CarrierWave::Mongoid do
         expect(@double_embedded_doc.save).to be_truthy
         expect(File.exist?(public_path('uploads/new.jpeg'))).to be_truthy
         expect(File.exist?(public_path('uploads/old.jpeg'))).to be_truthy
+      ensure
+        @double_embedded_doc.image.class.remove_previously_stored_files_after_update = true
       end
 
       it "should not remove file if old file had the same path" do
