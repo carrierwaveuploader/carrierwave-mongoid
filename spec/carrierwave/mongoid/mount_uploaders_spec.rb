@@ -382,15 +382,20 @@ describe CarrierWave::Mongoid do
 
         before do
           model_class.create!(images: files)
+          record.update!(images: [stub_file('test.jpeg')])
+          record.reload
         end
 
-        it 'replaced it by a file with the same name' do
-          record.update!(images: [stub_file('test.jpeg')])
-
-          record.reload
-
-          expect(record[:images]).to match_array(['test.jpeg'])
-          expect(record.images_identifiers).to match_array(['test.jpeg'])
+        if Gem::Version.new(CarrierWave::VERSION) >= Gem::Version.new("3.0.beta")
+          it "performs deduplication" do
+            expect(record[:images]).to match_array(['test(2).jpeg'])
+            expect(record.images_identifiers).to match_array(['test(2).jpeg'])
+          end
+        else
+          it 'replaced it by a file with the same name' do
+            expect(record[:images]).to match_array(['test.jpeg'])
+            expect(record.images_identifiers).to match_array(['test.jpeg'])
+          end
         end
       end
 

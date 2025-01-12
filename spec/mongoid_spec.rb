@@ -340,14 +340,21 @@ describe CarrierWave::Mongoid do
       @doc.image = stub_file('test.jpeg')
       @doc.save
       @doc.reload
-    end
-
-    it "replaced it by a file with the same name" do
       @doc.image = stub_file('test.jpeg')
       @doc.save
       @doc.reload
-      expect(@doc[:image]).to eq 'test.jpeg'
-      expect(@doc.image_identifier).to eq 'test.jpeg'
+    end
+
+    if Gem::Version.new(CarrierWave::VERSION) >= Gem::Version.new("3.0.beta")
+      it "performs deduplication" do
+        expect(@doc[:image]).to eq 'test(2).jpeg'
+        expect(@doc.image_identifier).to eq 'test(2).jpeg'
+      end
+    else
+      it "replaced it by a file with the same name" do
+        expect(@doc[:image]).to eq 'test.jpeg'
+        expect(@doc.image_identifier).to eq 'test.jpeg'
+      end
     end
 
   end
