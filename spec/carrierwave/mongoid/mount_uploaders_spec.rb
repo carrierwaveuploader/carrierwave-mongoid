@@ -140,6 +140,7 @@ describe CarrierWave::Mongoid do
 
       describe 'model#remove_uploaders=' do
         before do
+          model.images = [stub_file('test.jpg')]
           model.save
         end
 
@@ -208,7 +209,7 @@ describe CarrierWave::Mongoid do
 
             before do
               model.save!
-              model.collection.update_one({ _id: model.id }, { images: identifiers })
+              model.collection.update_one({ _id: model.id }, '$set' => { images: identifiers })
             end
 
             it 'returns an array of uploaders' do
@@ -239,10 +240,6 @@ describe CarrierWave::Mongoid do
                 expect(model.images.map(&:identifier)).to match_array(identifiers)
               end
 
-              it 'does not write anything to the database, in order to prevent overridden filenames to fail because of unassigned attributes' do
-                expect(model[:images]).to match_array([])
-              end
-
               it 'copies a file into into the cache directory' do
                 expect(model.images.first.current_path).to match(/^#{Regexp.escape(public_path('uploads/tmp'))}/)
               end
@@ -258,10 +255,6 @@ describe CarrierWave::Mongoid do
               it 'caches the file' do
                 expect(model.images).to all(be_an_instance_of(uploader_class))
                 expect(model.images.map(&:identifier)).to match_array(['portrait.jpg', 'test.jpeg'])
-              end
-
-              it 'does not write anything to the database, in order to prevent overridden filenames to fail because of unassigned attributes' do
-                expect(model[:images]).to match_array(['portrait.jpg'])
               end
 
               it 'copies a file into into the cache directory' do
@@ -299,10 +292,6 @@ describe CarrierWave::Mongoid do
           it 'caches the files' do
             expect(model.images.count).to be files.count
             expect(model.images).to all(be_an_instance_of(uploader_class))
-          end
-
-          it 'does not write to the database' do
-            expect(model[:images]).to be_empty
           end
 
           it 'copies a file into into the cache directory' do
@@ -393,15 +382,20 @@ describe CarrierWave::Mongoid do
 
         before do
           model_class.create!(images: files)
+          record.update!(images: [stub_file('test.jpeg')])
+          record.reload
         end
 
-        it 'replaced it by a file with the same name' do
-          record.update!(images: [stub_file('test.jpeg')])
-
-          record.reload
-
-          expect(record[:images]).to match_array(['test.jpeg'])
-          expect(record.images_identifiers).to match_array(['test.jpeg'])
+        if Gem::Version.new(CarrierWave::VERSION) >= Gem::Version.new("3.0.beta")
+          it "performs deduplication" do
+            expect(record[:images]).to match_array(['test(2).jpeg'])
+            expect(record.images_identifiers).to match_array(['test(2).jpeg'])
+          end
+        else
+          it 'replaced it by a file with the same name' do
+            expect(record[:images]).to match_array(['test.jpeg'])
+            expect(record.images_identifiers).to match_array(['test.jpeg'])
+          end
         end
       end
 
@@ -492,12 +486,14 @@ describe CarrierWave::Mongoid do
             expect(model.save).to be_truthy
             expect(File).to exist(public_path('uploads/new.jpeg'))
             expect(File).to exist(public_path('uploads/old.jpeg'))
+          ensure
+            uploader_class.remove_previously_stored_files_after_update = true
           end
 
-          it 'does not remove file if old file had the same path' do
+          it 'does not remove new file if both of files had the same path' do
             model.images = [stub_file('old.jpeg')]
             expect(model.save).to be_truthy
-            expect(File).to exist(public_path('uploads/old.jpeg'))
+            expect(File).to exist(model.images[0].path)
           end
 
           it 'does not remove file if validations fail on save' do
@@ -519,13 +515,13 @@ describe CarrierWave::Mongoid do
 
           let!(:model) { model_class.create!(name: 'Mike', images: [stub_file('old.jpeg')]) }
 
-          it 'does not remove file if old file had the same dynamic path' do
+          it 'does not remove new file if both of files had the same path' do
             expect(File).to exist(public_path('uploads/Mike.jpeg'))
             expect(model.images.first.read).to eq 'this is stuff'
 
             model.update!(images: [stub_file('test.jpeg')])
 
-            expect(File).to exist(public_path('uploads/Mike.jpeg'))
+            expect(File).to exist(model.images[0].path)
           end
 
           it 'removes old file if old file had a different dynamic path' do
@@ -553,12 +549,14 @@ describe CarrierWave::Mongoid do
             expect(embedded_model.save).to be_truthy
             expect(File).to exist(public_path('uploads/new.jpeg'))
             expect(File).to exist(public_path('uploads/old.jpeg'))
+          ensure
+            uploader_class.remove_previously_stored_files_after_update = true
           end
 
-          it 'does not remove file if old file had the same path' do
+          it 'should not remove new file if both of files had the same path' do
             embedded_model.images = [stub_file('old.jpeg')]
             expect(embedded_model.save).to be_truthy
-            expect(File).to exist(public_path('uploads/old.jpeg'))
+            expect(File).to exist(embedded_model.images[0].path)
           end
 
           it 'does not remove file if validations fail on save' do
@@ -592,12 +590,14 @@ describe CarrierWave::Mongoid do
             expect(double_embedded_model.save).to be_truthy
             expect(File).to exist(public_path('uploads/new.jpeg'))
             expect(File).to exist(public_path('uploads/old.jpeg'))
+          ensure
+            uploader_class.remove_previously_stored_files_after_update = true
           end
 
-          it 'does not remove file if old file had the same path' do
+          it 'should not remove new file if both of files had the same path' do
             double_embedded_model.images = [stub_file('old.jpeg')]
             expect(double_embedded_model.save).to be_truthy
-            expect(File).to exist(public_path('uploads/old.jpeg'))
+            expect(File).to exist(double_embedded_model.images[0].path)
           end
 
           it 'does not remove file if validations fail on save' do
@@ -878,14 +878,14 @@ describe CarrierWave::Mongoid do
             expect(File).not_to exist(public_path('uploads/thumb_old.jpeg'))
           end
 
-          it 'does not remove file if old file had the same path' do
+          it 'does not remove new file if both of files had the same path' do
             expect(File).to exist(public_path('uploads/old.jpeg'))
             expect(File).to exist(public_path('uploads/thumb_old.jpeg'))
 
             model.update!(images: [stub_file('old.jpeg')])
 
-            expect(File).to exist(public_path('uploads/old.jpeg'))
-            expect(File).to exist(public_path('uploads/thumb_old.jpeg'))
+            expect(File).to exist(model.images[0].path)
+            expect(File).to exist(model.images[0].thumb.path)
           end
         end
 
@@ -926,7 +926,7 @@ describe CarrierWave::Mongoid do
             expect(File).not_to exist(public_path('uploads/old.txt'))
           end
 
-          it 'removes old file1 but not file2 if old file1 had a different path but old file2 has the same path' do
+          it 'removes old file1 but not new file2 if old file1 had a different path but old file2 has the same path' do
             expect(File).to exist(public_path('uploads/old.jpeg'))
             expect(File).to exist(public_path('uploads/old.txt'))
 
@@ -934,17 +934,17 @@ describe CarrierWave::Mongoid do
 
             expect(File).to exist(public_path('uploads/new.jpeg'))
             expect(File).not_to exist(public_path('uploads/old.jpeg'))
-            expect(File).to exist(public_path('uploads/old.txt'))
+            expect(File).to exist(model.textfiles[0].path)
           end
 
-          it 'does not remove file1 or file2 if file1 and file2 have the same paths' do
+          it 'does not remove new files if each pair of files has the same paths' do
             expect(File).to exist(public_path('uploads/old.jpeg'))
             expect(File).to exist(public_path('uploads/old.txt'))
 
             model.update!(images: [stub_file('old.jpeg')], textfiles: [stub_file('old.txt')])
 
-            expect(File).to exist(public_path('uploads/old.jpeg'))
-            expect(File).to exist(public_path('uploads/old.txt'))
+            expect(File).to exist(model.images[0].path)
+            expect(File).to exist(model.textfiles[0].path)
           end
         end
 
@@ -981,12 +981,12 @@ describe CarrierWave::Mongoid do
             expect(File).not_to exist(public_path('uploads/old.jpeg'))
           end
 
-          it 'does not remove file if old file had the same path' do
+          it 'does not remove new file if both of files had the same path' do
             expect(File).to exist(public_path('uploads/old.jpeg'))
 
             model.update!(avatars: [stub_file('old.jpeg')])
 
-            expect(File).to exist(public_path('uploads/old.jpeg'))
+            expect(File).to exist(model.avatars[0].path)
           end
         end
       end
