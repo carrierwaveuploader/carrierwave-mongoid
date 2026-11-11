@@ -6,26 +6,14 @@ jobs:
     strategy:
       matrix:
         mongodb: [4.4]
-        ruby: [2.7, "3.0", 3.1, 3.2, 3.3]
+        ruby: ["3.2", "3.3", "3.4"]
         gemfile:
           - carrierwave-2.2
+          - carrierwave-3.0
           - carrierwave-3.1
           - mongoid-7
           - mongoid-8
           - mongoid-9
-        include:
-          - { mongodb: "4.4", ruby: "2.6", gemfile: "carrierwave-0.10" }
-          - { mongodb: "4.4", ruby: "2.6", gemfile: "carrierwave-0.11" }
-          - { mongodb: "4.4", ruby: "2.6", gemfile: "carrierwave-1.1" }
-          - { mongodb: "4.4", ruby: "2.6", gemfile: "carrierwave-1.2" }
-          - { mongodb: "4.4", ruby: "2.6", gemfile: "carrierwave-1.3" }
-          - { mongodb: "4.4", ruby: "2.6", gemfile: "carrierwave-2.0" }
-          - { mongodb: "4.4", ruby: "2.6", gemfile: "carrierwave-2.1" }
-          - { mongodb: "4.4", ruby: "2.6", gemfile: "carrierwave-3.0" }
-          - { mongodb: "4.4", ruby: "2.6", gemfile: "mongoid-3" }
-          - { mongodb: "4.4", ruby: "2.6", gemfile: "mongoid-4" }
-          - { mongodb: "4.4", ruby: "2.6", gemfile: "mongoid-5" }
-          - { mongodb: "4.4", ruby: "2.6", gemfile: "mongoid-6" }
     name: Ruby ${{ matrix.ruby }} with ${{ matrix.gemfile }}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
