@@ -3,6 +3,7 @@ require 'bundler/setup'
 require 'rspec'
 require 'tempfile'
 require 'stringio'
+require 'logger'
 
 require 'carrierwave'
 require 'carrierwave/mongoid'
